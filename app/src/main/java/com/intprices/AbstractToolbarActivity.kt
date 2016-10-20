@@ -8,6 +8,7 @@ import android.support.annotation.IdRes
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import kotlinx.android.synthetic.main.activity_toolbar.*
 import kotlin.jvm.*
 
@@ -15,7 +16,6 @@ import kotlin.jvm.*
 abstract class AbstractToolbarActivity : AppCompatActivity() {
 
     var activityTitle = 0
-    var activityLayout = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +34,12 @@ abstract class AbstractToolbarActivity : AppCompatActivity() {
         activityTitle = title
         viewstub.layoutResource = layout
         viewstub.inflate()
+    }
+    protected fun setSettings(@IdRes title: Int, layout: Int,backToggle: Boolean=true) {
+        activityTitle = title
+        viewstub.layoutResource = layout
+        viewstub.inflate()
+        if(backToggle)setBackToggle()
     }
 
     private fun initToolbar() {
@@ -62,9 +68,11 @@ abstract class AbstractToolbarActivity : AppCompatActivity() {
     private fun isConnected(): Boolean {
         val connMgr = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val networkInfo = connMgr.getActiveNetworkInfo()
-        return networkInfo != null && networkInfo.isConnected()
+        return networkInfo?.isConnected() ?: false
     }
 
     protected fun setBackToggle() {
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
+    open protected fun onSearchClick(v: View){}
 }

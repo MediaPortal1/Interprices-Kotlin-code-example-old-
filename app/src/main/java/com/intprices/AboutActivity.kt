@@ -9,7 +9,7 @@ import kotlinx.android.synthetic.main.activity_about.*
 class AboutActivity : AbstractToolbarActivity() {
 
     override fun setSettings() {
-        setSettings(R.string.title_activity_about, R.layout.activity_about)
+        setSettings(R.string.title_activity_about, R.layout.activity_about,true)
     }
 
     override fun initViews() {
