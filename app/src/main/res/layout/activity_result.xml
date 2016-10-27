@@ -1,49 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.SwipeRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_result"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".SearchResultActivity">
-
-    <LinearLayout
+    tools:context=".SearchResultActivity"
+    >
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <AutoCompleteTextView
-            android:id="@+id/query"
-            android:layout_width="0dip"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:ems="20"
-            android:hint="@string/search_hint"
-            android:imeActionLabel="Search"
-            android:imeOptions="flagNoExtractUi|actionSearch"
-            android:inputType="text" />
-
-        <ImageButton
-            android:id="@+id/btn_filter"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/textview_noitems"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:background="@null"
-            android:contentDescription="Search"
-            android:onClick="onSearchClick"
-            android:src="@drawable/btn_filter" />
-
-        <ImageButton
-            android:id="@+id/btn_search"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:visibility="gone"
+            android:layout_centerInParent="true"
+            />
+        <ProgressBar
+            android:id="@+id/progressbar"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            android:layout_centerInParent="true"
+            />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerview"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@null"
-            android:contentDescription="Search"
-            android:onClick="onSearchClick"
-            android:src="@drawable/btn_search" />
-
-    </LinearLayout>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-</LinearLayout>
+            android:visibility="invisible"
+            android:layout_centerInParent="true"
+            />
+    </RelativeLayout>
+</android.support.v4.widget.SwipeRefreshLayout>

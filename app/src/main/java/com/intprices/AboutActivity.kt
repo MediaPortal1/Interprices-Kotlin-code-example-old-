@@ -1,6 +1,7 @@
 package com.intprices
 
 import android.content.pm.PackageManager
+import android.os.Bundle
 import android.text.Html
 import android.text.method.LinkMovementMethod
 import android.view.Menu
@@ -9,10 +10,10 @@ import kotlinx.android.synthetic.main.activity_about.*
 class AboutActivity : AbstractToolbarActivity() {
 
     override fun setSettings() {
-        setSettings(R.string.title_activity_about, R.layout.activity_about,true)
+        setSettings(R.string.title_activity_about, R.layout.activity_about,true,false)
     }
 
-    override fun initViews() {
+    override fun initViews(state: Bundle?) {
         var versionName = "0"
         try {
             versionName = packageManager.getPackageInfo(packageName, 0).versionName

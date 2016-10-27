@@ -36,7 +36,7 @@
             android:layout_height="match_parent"
             android:contentDescription="Search"
             android:background="@null"
-            android:src="@drawable/btn_search"
+            android:src="@drawable/ic_magnify_dark"
             android:onClick="onSearchClick"
             />
 

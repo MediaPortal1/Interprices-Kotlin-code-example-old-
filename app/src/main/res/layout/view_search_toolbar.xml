@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AutoCompleteTextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/search_toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:ems="20"
+    android:hint="@string/search_hint"
+    android:imeActionLabel="Search"
+    android:imeOptions="flagNoExtractUi|actionSearch"
+    android:inputType="text"
+    android:textColor="@color/white"
+    android:textColorHint="@color/primaryColorDark"
+    android:backgroundTint="@color/white"
+    style="@style/ToolbarSearchEditText"
+    />

@@ -12,6 +12,37 @@
     </style>
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
+    <style name="InfoBlockTextView">
+        <item name="android:textSize">@dimen/text_small</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:paddingLeft">@dimen/info_block_padding_lr</item>
+        <item name="android:paddingRight">@dimen/info_block_padding_lr</item>
+        <item name="android:paddingTop">@dimen/info_block_padding_tb</item>
+        <item name="android:paddingBottom">@dimen/info_block_padding_tb</item>
+    </style>
 
+    <style name="PriceTextView" parent="InfoBlockTextView">
+        <item name="android:background">@drawable/price_shape_bg</item>
+    </style>
+    <style name="BuyitnowpriceTextView" parent="InfoBlockTextView">
+        <item name="android:background">@drawable/buyitnow_shape_bg</item>
+    </style>
+
+    <style name="FreeShippingTextView" parent="InfoBlockTextView">
+        <item name="android:background">@drawable/freeshipping_shape_bg</item>
+        <item name="android:padding">@dimen/info_block_little_padding</item>
+        <item name="android:textSize">@dimen/text_verysmall</item>
+        <item name="android:paddingLeft">@dimen/small_padding</item>
+        <item name="android:paddingRight">@dimen/small_padding</item>
+    </style>
+    <style name="ToolbarSearchEditText">
+        <item name="colorControlNormal">@color/white</item>
+        <item name="colorControlActivated">@color/primaryColorDark</item>
+        <item name="colorControlHighlight">@color/white</item>
+    </style>
+    <style name="SearchButton">
+        <item name="android:background">@drawable/price_shape_bg</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
 
 </resources>

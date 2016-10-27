@@ -7,8 +7,11 @@
     <data>
 
         <import
+            alias="view"
+            type="android.view.View" />
+        <import
             alias="image"
-            type="com.intprices.util.ImageLoader" />
+            type="com.intprices.util.DataBindingUtil" />
 
         <variable
             name="product"
@@ -18,20 +21,24 @@
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/cardview_margin"
-        card_view:cardCornerRadius="4dp">
+        android:layout_marginLeft="@dimen/cardview_marginside"
+        android:layout_marginRight="@dimen/cardview_marginside"
+        android:layout_marginTop="@dimen/cardview_margintop"
+        card_view:cardCornerRadius="4dp"
+        android:background="?attr/selectableItemBackground"
+        bind:onClick="@{product.url}"
+        >
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="@dimen/cardview_padding"
-            >
+            android:padding="@dimen/cardview_padding">
 
             <ImageView
                 android:layout_width="@dimen/product_list_image_width"
                 android:layout_height="@dimen/product_list_image_height"
                 android:layout_alignParentRight="true"
-                />
+                bind:loadImage="@{product.image}" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -41,14 +48,150 @@
                 android:paddingRight="5dp">
 
                 <TextView
-                    android:id="@+id/product_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:text="@{product.title}"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/text_medium"
-                    android:visibility="gone" />
+                    android:textSize="@dimen/text_medium" />
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{product.subtitle}"
+                    android:textColor="@color/gray"
+                    android:textSize="@dimen/text_small"
+                    android:visibility="@{product.subtitle !=null ? view.VISIBLE : view.GONE}" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{@string/item_shop+':'+' '+ product.shop}"
+                    android:textColor="@color/gray"
+                    android:textSize="@dimen/text_small"
+                    android:visibility="@{product.shop !=null ? view.VISIBLE : view.GONE}" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{@string/item_availability + ':' + ' ' + product.availabilityType}"
+                    android:textColor="@color/gray"
+                    android:textSize="@dimen/text_small"
+                    android:visibility="@{product.availabilityType !=null ? view.VISIBLE : view.GONE}" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{@string/item_buy_it_now + ':' + ' ' + String.valueOf(product.buyItNowAvailable)}"
+                    android:textColor="@color/gray"
+                    android:textSize="@dimen/text_small"
+                    android:visibility="@{product.buyItNowAvailable ? view.VISIBLE : view.GONE}" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{product.state}"
+                    android:textColor="@color/gray"
+                    android:textSize="@dimen/text_small"
+                    android:visibility="@{product.state !=null ? view.VISIBLE : view.GONE}" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{@string/shipping_type + ':' + ' ' + product.shippingType}"
+                    android:textColor="@color/gray"
+                    android:textSize="@dimen/text_small"
+                    android:visibility="@{product.shippingType !=null ? view.VISIBLE : view.GONE}" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{@string/best_offered + ':' + ' ' + String.valueOf(product.bestOfferEnabled)}"
+                    android:textColor="@color/gray"
+                    android:textSize="@dimen/text_small"
+                    android:visibility="@{product.bestOfferEnabled ? view.VISIBLE : view.GONE}" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{@string/item_condition + ':' + ' ' + String.valueOf(product.condition)}"
+                    android:textColor="@color/gray"
+                    android:textSize="@dimen/text_small"
+                    android:visibility="@{product.condition!=null ? view.VISIBLE : view.GONE}" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{@string/current_date + ':' + ' ' + product.endDate.toString()}"
+                    android:textColor="@color/gray"
+                    android:textSize="@dimen/text_small"
+                    android:visibility="@{product.currentDate!=null ? view.VISIBLE : view.GONE}" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{@string/end_date + ':' + ' ' + product.endDate.toString()}"
+                    android:textColor="@color/gray"
+                    android:textSize="@dimen/text_small"
+                    android:visibility="@{product.endDate!=null ? view.VISIBLE : view.GONE}" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{@string/item_time_left + ':' + ' ' + String.valueOf(product.timeLeft)}"
+                    android:textColor="@color/gray"
+                    android:textSize="@dimen/text_small"
+                    android:visibility="@{product.timeLeft!=null ? view.VISIBLE : view.GONE}" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{@string/item_bids + ':' + ' ' + String.valueOf(product.bidCount)}"
+                    android:textColor="@color/gray"
+                    android:textSize="@dimen/text_small"
+                    android:visibility="@{(product.bidCount!=0) ? view.VISIBLE : view.GONE}" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{@string/listing_type + ':' + ' ' + product.listingType}"
+                    android:textColor="@color/gray"
+                    android:textSize="@dimen/text_small"
+                    android:visibility="@{(product.listingType!=null) ? view.VISIBLE : view.GONE}" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{@string/shipping_cost + ':' + ' ' + String.valueOf(product.shippingServiceCost)}"
+                    android:textColor="@color/gray"
+                    android:textSize="@dimen/text_small"
+                    android:visibility="@{(product.shippingServiceCost!=(float)0) ? view.VISIBLE : view.GONE}" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/freeShipping"
+                    android:visibility="@{product.freeShipping ? view.VISIBLE : view.GONE}"
+                    style="@style/FreeShippingTextView"
+                    />
+
+                <LinearLayout
+                    android:layout_marginTop="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/PriceTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{@string/item_price+':'+' ' + String.valueOf(product.price)+' '+'$'}"
+                        android:visibility="@{product.price !=(float)0 ? view.VISIBLE : view.GONE}" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="@{String.valueOf(product.oldPrice)+' '+'$'}"
+                        android:textColor="@color/gray"
+                        android:textSize="@dimen/text_small"
+                        android:visibility="@{product.oldPrice !=(float)0 ? view.VISIBLE : view.GONE}"
+                        bind:strike="@{true}"
+                        />
+                </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{@string/item_buy_it_now+':'+' ' + String.valueOf(product.buyItNowPrice)+' '+'$'}"
+                    android:visibility="@{product.buyItNowPrice !=(float)0 ? view.VISIBLE : view.GONE}"
+                    style="@style/BuyitnowpriceTextView"
+                    />
             </LinearLayout>
         </RelativeLayout>
     </android.support.v7.widget.CardView>

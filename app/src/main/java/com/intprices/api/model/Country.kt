@@ -1,6 +1,8 @@
 package com.intprices.api.model
 
 import com.google.gson.annotations.SerializedName
+import com.intprices.util.SettingMap
+import java.util.*
 
 
-data class Country(@SerializedName("name") var name:String,@SerializedName("key") var key:String)
+class Country(name: String,key: String):SettingsItem(name,key)

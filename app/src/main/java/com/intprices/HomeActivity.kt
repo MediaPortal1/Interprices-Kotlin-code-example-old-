@@ -1,5 +1,6 @@
 package com.intprices
 import android.content.Intent
+import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -13,10 +14,10 @@ class HomeActivity: AbstractToolbarActivity() {
     }
 
     override fun setSettings() {
-        setSettings(R.string.title_activity_home,R.layout.activity_home)
+        setSettings(R.string.title_activity_home,R.layout.activity_home,false,true)
     }
 
-    override fun initViews() {
+    override fun initViews(state: Bundle?) {
         query.imeOptions=EditorInfo.IME_ACTION_SEARCH
         query.setOnEditorActionListener (object : TextView.OnEditorActionListener{
             override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {

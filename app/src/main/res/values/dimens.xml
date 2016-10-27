@@ -8,6 +8,7 @@
     <dimen name="medium_padding">10dp</dimen>
 
     <dimen name="text_small">14sp</dimen>
+    <dimen name="text_verysmall">10sp</dimen>
     <dimen name="text_medium">18sp</dimen>
     <dimen name="text_large">20sp</dimen>
     <dimen name="text_xlarge">22sp</dimen>
@@ -28,7 +29,12 @@
     <dimen name="product_list_image_height">110dip</dimen>
 
     <dimen name="cardview_padding">10dp</dimen>
-    <dimen name="cardview_margin">10dp</dimen>
+    <dimen name="cardview_margintop">10dp</dimen>
+    <dimen name="cardview_marginside">5dp</dimen>
+    <dimen name="info_block_price_padding_lr">20dp</dimen>
+    <dimen name="info_block_padding_lr">10dp</dimen>
+    <dimen name="info_block_padding_tb">5dp</dimen>
+    <dimen name="info_block_little_padding">3dp</dimen>
 
 
 </resources>
