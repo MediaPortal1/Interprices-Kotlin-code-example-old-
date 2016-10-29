@@ -188,6 +188,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/small_padding"
                     android:text="@{@string/item_buy_it_now+':'+' ' + String.valueOf(product.buyItNowPrice)+' '+'$'}"
                     android:visibility="@{product.buyItNowPrice !=(float)0 ? view.VISIBLE : view.GONE}"
                     style="@style/BuyitnowpriceTextView"

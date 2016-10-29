@@ -6,6 +6,7 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_home.*
+import kotlinx.android.synthetic.main.activity_toolbar.*
 
 class HomeActivity: AbstractToolbarActivity() {
 
@@ -31,12 +32,15 @@ class HomeActivity: AbstractToolbarActivity() {
     }
 
     override fun onSearchClick(v: View){
-        startResultActivity()
+        when(v.id){
+        R.id.settings_btn -> startResultActivity(settings_query.text.toString())
+        R.id.btn_search -> startResultActivity()
+        }
     }
 
-    private fun startResultActivity(){
+    private fun startResultActivity(querytext:String=query.text.toString()){
         val intent=Intent(this,SearchResultActivity::class.java)
-        intent.putExtra(HomeActivity.Companion.SEARCH_REQUEST,query.text.toString())
+        intent.putExtra(HomeActivity.Companion.SEARCH_REQUEST,makeSearchRequest(querytext))
         startActivity(intent)
     }
 

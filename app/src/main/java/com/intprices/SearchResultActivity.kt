@@ -22,12 +22,12 @@ import java.util.*
 
 class SearchResultActivity : AbstractToolbarActivity(), OnLoadProducts, OnPageChange {
 
-    private var request: String = ""
     private var page = 1
     private var productlist = ArrayList<Product>()
     private var adapter: ResultsRecyclerAdapter? = null
     private var isLoaded = false
     private val listkey = "PRODUCT_LIST"
+    private lateinit var requestMap:HashMap<String,String>
 
     override fun setSettings() {
         setSettings(R.string.title_activity_search, R.layout.activity_result, true,true)
@@ -42,7 +42,7 @@ class SearchResultActivity : AbstractToolbarActivity(), OnLoadProducts, OnPageCh
         }
 
         if (intent?.hasExtra(HomeActivity.Companion.SEARCH_REQUEST)!!) {
-            request = intent.getStringExtra(HomeActivity.Companion.SEARCH_REQUEST)
+            requestMap = intent.getBundleExtra(HomeActivity.Companion.SEARCH_REQUEST).loadFromBundle()  as HashMap<String, String>
             if (!isLoaded) tryToLoadResults() else {
                 setLoading(false, true, false)
                 adapter?.notifyDataSetChanged()
@@ -93,16 +93,23 @@ class SearchResultActivity : AbstractToolbarActivity(), OnLoadProducts, OnPageCh
 
 
         override fun loadProducts() {
+            if(isLoaded)makeSearchRequest(request,page)
             LoadResults().execute()
 
         }
 
         override fun incrementPage() {
             page++
+            requestMap["page"]="$page"
         }
 
+    override fun onSearchClick(v: View) {
+        makeSearchRequest()
+        onClearResults()
+        tryToLoadResults()
+    }
 
-        override fun isLastPage() = false
+    override fun isLastPage() = false
 
         override fun onSaveInstanceState(outState: Bundle?) {
             super.onSaveInstanceState(outState)
@@ -124,7 +131,7 @@ class SearchResultActivity : AbstractToolbarActivity(), OnLoadProducts, OnPageCh
                 searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()))
                 searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                     override fun onQueryTextSubmit(query: String?): Boolean {
-                        request = query!!
+                        makeSearchRequest(query!!)
                         onClearResults()
                         tryToLoadResults()
                         return true
@@ -148,7 +155,7 @@ class SearchResultActivity : AbstractToolbarActivity(), OnLoadProducts, OnPageCh
             }
 
             override fun doInBackground(vararg params: Int?): List<Product>? {
-                return responce.getSearchResult(request, page)!!.products
+                return responce.getSearchResult(requestMap)!!.products
             }
 
             override fun onPostExecute(result: List<Product>?) {

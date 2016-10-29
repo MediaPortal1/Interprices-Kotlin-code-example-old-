@@ -33,6 +33,11 @@ class ResultResponce private constructor(val request: IntpricesRequest) {
         val responce = call?.execute()
         return responce?.body()
     }
+    fun getSearchResult(querymap:Map<String,String>): SearchResponce? {
+        val call=this.request?.getProducts(querymap)
+        val responce = call?.execute()
+        return responce?.body()
+    }
 
     fun getSettingsResult(): SettingsResponce? {
         val call=this.request?.getSettings()
