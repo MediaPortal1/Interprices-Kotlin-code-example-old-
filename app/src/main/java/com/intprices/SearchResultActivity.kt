@@ -27,7 +27,6 @@ class SearchResultActivity : AbstractToolbarActivity(), OnLoadProducts, OnPageCh
     private var adapter: ResultsRecyclerAdapter? = null
     private var isLoaded = false
     private val listkey = "PRODUCT_LIST"
-    private lateinit var requestMap:HashMap<String,String>
 
     override fun setSettings() {
         setSettings(R.string.title_activity_search, R.layout.activity_result, true,true)
@@ -37,12 +36,17 @@ class SearchResultActivity : AbstractToolbarActivity(), OnLoadProducts, OnPageCh
         initProductList()
 
         if (state != null && state?.containsKey(listkey)!!) {
-            productlist.addAll(state?.getParcelableArrayList<Product>(listkey)!!)
-            isLoaded = true
+            val savedlist=state?.getParcelableArrayList<Product>(listkey)
+            if(savedlist!=null && savedlist.size!=0) {
+                productlist.addAll(state?.getParcelableArrayList<Product>(listkey)!!)
+                isLoaded = true
+            }
         }
 
         if (intent?.hasExtra(HomeActivity.Companion.SEARCH_REQUEST)!!) {
+
             requestMap = intent.getBundleExtra(HomeActivity.Companion.SEARCH_REQUEST).loadFromBundle()  as HashMap<String, String>
+
             if (!isLoaded) tryToLoadResults() else {
                 setLoading(false, true, false)
                 adapter?.notifyDataSetChanged()
@@ -93,7 +97,7 @@ class SearchResultActivity : AbstractToolbarActivity(), OnLoadProducts, OnPageCh
 
 
         override fun loadProducts() {
-            if(isLoaded)makeSearchRequest(request,page)
+            if(isLoaded)makeSearchMap(request,page)
             LoadResults().execute()
 
         }
@@ -104,7 +108,7 @@ class SearchResultActivity : AbstractToolbarActivity(), OnLoadProducts, OnPageCh
         }
 
     override fun onSearchClick(v: View) {
-        makeSearchRequest()
+        makeSearchMap()
         onClearResults()
         tryToLoadResults()
     }
@@ -120,7 +124,9 @@ class SearchResultActivity : AbstractToolbarActivity(), OnLoadProducts, OnPageCh
             productlist.clear()
             isLoaded = false
             page = 1
+            requestMap["page"]="$page"
             setLoading(true,isConnected(),false)
+            initProductList()
         }
         override fun onCreateOptionsMenu(menu: Menu?): Boolean {
             menuInflater.inflate(R.menu.search_menu, menu)
@@ -131,7 +137,7 @@ class SearchResultActivity : AbstractToolbarActivity(), OnLoadProducts, OnPageCh
                 searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()))
                 searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                     override fun onQueryTextSubmit(query: String?): Boolean {
-                        makeSearchRequest(query!!)
+                        makeSearchMap(query!!)
                         onClearResults()
                         tryToLoadResults()
                         return true
@@ -169,6 +175,7 @@ class SearchResultActivity : AbstractToolbarActivity(), OnLoadProducts, OnPageCh
 
                 if (productlist.size != 0) isLoaded = true
                 root_result.isRefreshing=false
+                openDrawer(false)
                 super.onPostExecute(result)
             }
         }

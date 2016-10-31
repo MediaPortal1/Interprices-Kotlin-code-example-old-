@@ -26,20 +26,20 @@ public data class Product(@SerializedName("title") var title: String, @Serialize
     @SerializedName("timeLeft") var timeLeft: String? = null //
     @SerializedName("condition") var condition: String? = null//
     @SerializedName("shippingType") var shippingType: String? = null//
-    @SerializedName("shipToLocations") var shipToLocations: List<String>? = null
+    @SerializedName("shipToLocations") var shipToLocations: List<String>? = null//
     @SerializedName("shippingServiceCost") var shippingServiceCost: Float = 0.toFloat()//
     @SerializedName("endDate") var endDate: Date? = null//
     @SerializedName("currentDate") var currentDate: Date? = null//
 
     // amazon
-    @SerializedName("totalNew") var totalNew: Int = 0
-    @SerializedName("lowestNewPrice") var lowestNewPrice: Float = 0.toFloat()
-    @SerializedName("totalUsed") var totalUsed: Int = 0
-    @SerializedName("lowestUsedPrice") var lowestUsedPrice: Float = 0.toFloat()
-    @SerializedName("totalCollectible") var totalCollectible: Int = 0
-    @SerializedName("lowestCollectiblePrice") var lowestCollectiblePrice: Float = 0.toFloat()
-    @SerializedName("totalRefurbished") var totalRefurbished: Int = 0
-    @SerializedName("lowestRefurbishedPrice") var lowestRefurbishedPrice: Float = 0.toFloat()
+    @SerializedName("totalNew") var totalNew: Int = 0//
+    @SerializedName("lowestNewPrice") var lowestNewPrice: Float = 0.toFloat()//
+    @SerializedName("totalUsed") var totalUsed: Int = 0//
+    @SerializedName("lowestUsedPrice") var lowestUsedPrice: Float = 0.toFloat()//
+    @SerializedName("totalCollectible") var totalCollectible: Int = 0//
+    @SerializedName("lowestCollectiblePrice") var lowestCollectiblePrice: Float = 0.toFloat()//
+    @SerializedName("totalRefurbished") var totalRefurbished: Int = 0//
+    @SerializedName("lowestRefurbishedPrice") var lowestRefurbishedPrice: Float = 0.toFloat()//
     @SerializedName("amountSaved") var amountSaved: Float = 0.toFloat()
     @SerializedName("percentageSaved") var percentageSaved: Float = 0.toFloat()
     @SerializedName("availabilityType") var availabilityType: String? = null//

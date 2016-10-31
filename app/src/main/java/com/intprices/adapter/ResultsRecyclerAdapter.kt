@@ -13,7 +13,7 @@ import com.intprices.databinding.ListItemProductBinding
 
 class ResultsRecyclerAdapter(val productlist: List<Product>, recyclerView: RecyclerView, pageChangeListener: OnPageChange, loadMoreListener: OnLoadProducts) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    var isLoading = false
+    var isLoading = true
     private val VIEW_TYPE_ITEM = 0
     private val VIEW_TYPE_LOADING = 1
 
@@ -21,7 +21,7 @@ class ResultsRecyclerAdapter(val productlist: List<Product>, recyclerView: Recyc
         val linearLayoutManager = recyclerView.getLayoutManager() as LinearLayoutManager
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             private var previousTotal = 0
-            private val visibleThreshold = 5
+            private val visibleThreshold = 4
             internal var firstVisibleItem: Int = 0
             internal var visibleItemCount: Int = 0
             internal var totalItemCount: Int = 0
@@ -36,16 +36,18 @@ class ResultsRecyclerAdapter(val productlist: List<Product>, recyclerView: Recyc
                 if (pageChangeListener.isLastPage()) {
                     return
                 }
-                if (isLoading) {
-                    if (totalItemCount > previousTotal) {
-                        isLoading = false
-                        previousTotal = totalItemCount
-                        pageChangeListener.incrementPage()
+                if (totalItemCount !in 0..1) {
+                    if (isLoading) {
+                        if (totalItemCount > previousTotal) {
+                            isLoading = false
+                            previousTotal = totalItemCount
+                            pageChangeListener.incrementPage()
+                        }
                     }
-                }
-                if (!isLoading && totalItemCount - visibleItemCount <= firstVisibleItem + visibleThreshold) {
-                    loadMoreListener.loadProducts()
-                    isLoading = true
+                    if (!isLoading && totalItemCount - visibleItemCount <= firstVisibleItem + visibleThreshold) {
+                        loadMoreListener.loadProducts()
+                        isLoading = true
+                    }
                 }
             }
         })
@@ -66,11 +68,11 @@ class ResultsRecyclerAdapter(val productlist: List<Product>, recyclerView: Recyc
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int) =
-            if (viewType==VIEW_TYPE_ITEM) {
+            if (viewType == VIEW_TYPE_ITEM) {
                 ProductHolder(DataBindingUtil.inflate<ListItemProductBinding>(LayoutInflater.from(parent?.context), R.layout.list_item_product, parent, false)
                 )
-            } else if(viewType==VIEW_TYPE_LOADING) LoadHolder(LayoutInflater.from(parent?.context).inflate(R.layout.list_item_load, parent, false))
-                else null
+            } else if (viewType == VIEW_TYPE_LOADING) LoadHolder(LayoutInflater.from(parent?.context).inflate(R.layout.list_item_load, parent, false))
+            else null
 
     //    Product holder
     class ProductHolder(val binding: ListItemProductBinding) : RecyclerView.ViewHolder(binding.root)

@@ -193,6 +193,89 @@
                     android:visibility="@{product.buyItNowPrice !=(float)0 ? view.VISIBLE : view.GONE}"
                     style="@style/BuyitnowpriceTextView"
                     />
+                <!--<LinearLayout-->
+                    <!--android:orientation="horizontal"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content">-->
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="@{'$' + product.lowestNewPrice + ' ' + @string/item_new}"-->
+                        <!--android:visibility="@{product.lowestNewPrice!=(float)0 ? view.VISIBLE : view.GONE}"-->
+                        <!--/>-->
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="@{product.totalNew+' '+@string/nav_item_deals}"-->
+                        <!--android:visibility="@{product.totalNew!=0 ? view.VISIBLE : view.GONE}"-->
+                        <!--android:layout_marginLeft="@dimen/small_padding"-->
+                        <!--/>-->
+                <!--</LinearLayout>-->
+                <!--<LinearLayout-->
+                    <!--android:orientation="horizontal"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content">-->
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="@{'$'+product.lowestUsedPrice+' '+@string/item_used}"-->
+                        <!--android:visibility="@{product.lowestUsedPrice!=(float)0 ? view.VISIBLE : view.GONE}"-->
+                        <!--/>-->
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="@{product.totalUsed+' '+@string/nav_item_deals}"-->
+                        <!--android:visibility="@{product.totalUsed!=0 ? view.VISIBLE : view.GONE}"-->
+                        <!--android:layout_marginLeft="@dimen/small_padding"-->
+                        <!--/>-->
+                <!--</LinearLayout>-->
+                <!--<LinearLayout-->
+                    <!--android:orientation="horizontal"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content">-->
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="@{'$'+product.lowestCollectiblePrice+' '+@string/item_collectible}"-->
+                        <!--android:visibility="@{product.lowestCollectiblePrice!=(float)0 ? view.VISIBLE : view.GONE}"-->
+                        <!--/>-->
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="@{product.totalCollectible+' '+@string/nav_item_deals}"-->
+                        <!--android:visibility="@{product.totalCollectible!=0 ? view.VISIBLE : view.GONE}"-->
+                        <!--android:layout_marginLeft="@dimen/small_padding"-->
+                        <!--/>-->
+                <!--</LinearLayout>-->
+                <!--<LinearLayout-->
+                    <!--android:orientation="horizontal"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content">-->
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="@{'$'+product.lowestRefurbishedPrice+' '+@string/item_refurbished}"-->
+                        <!--android:visibility="@{product.lowestCollectiblePrice!=(float)0 ? view.VISIBLE : view.GONE}"-->
+                        <!--/>-->
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="@{product.lowestRefurbished+' '+@string/nav_item_deals}"-->
+                        <!--android:visibility="@{product.totalRefurbished!=0 ? view.VISIBLE : view.GONE}"-->
+                        <!--android:layout_marginLeft="@dimen/small_padding"-->
+                        <!--/>-->
+                <!--</LinearLayout>-->
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                <Spinner
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    bind:shipping="@{product.shipToLocations}"
+                    android:visibility="@{product.shipToLocations!=null ? view.VISIBLE : view.GONE}"
+                    />
+                </LinearLayout>
             </LinearLayout>
         </RelativeLayout>
     </android.support.v7.widget.CardView>

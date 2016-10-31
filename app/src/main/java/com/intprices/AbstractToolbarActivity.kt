@@ -15,6 +15,7 @@ import android.view.*
 import android.widget.*
 import com.intprices.api.ResultResponce
 import com.intprices.api.model.*
+import kotlinx.android.synthetic.main.activity_result.*
 import kotlinx.android.synthetic.main.activity_toolbar.*
 import kotlinx.android.synthetic.main.activity_toolbar.view.*
 import java.util.*
@@ -25,6 +26,7 @@ abstract class AbstractToolbarActivity : AppCompatActivity(), AdapterView.OnItem
 
     var activityTitle = 0
     var responce = ResultResponce.instance
+    var drawerstatus=true
 
     protected var request: String = ""
     protected var category: String? = null
@@ -36,6 +38,7 @@ abstract class AbstractToolbarActivity : AppCompatActivity(), AdapterView.OnItem
     protected var condition: String? = null
     protected var sortby: String? = null
     protected var freeshipping: Boolean=false
+    protected lateinit var requestMap:HashMap<String,String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,7 +59,10 @@ abstract class AbstractToolbarActivity : AppCompatActivity(), AdapterView.OnItem
         viewstub.layoutResource = layout
         viewstub.inflate()
         if (backToggle) setBackToggle()
-        if (!drawer) drawerlayout.visibility = View.GONE
+        if (!drawer) {
+            drawerstatus=false
+            drawerlayout.removeView(navigationview)
+        }
     }
 
     private fun initToolbar() {
@@ -89,7 +95,7 @@ abstract class AbstractToolbarActivity : AppCompatActivity(), AdapterView.OnItem
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         val key = (parent?.adapter as SettingsSpinnerAdapter).getItem(position)["key"]
-        if(key!=null) {
+        if(key!=null || position==0) {
             when (parent?.id) {
                 R.id.settings_category -> category = key
                 R.id.settings_condition -> condition = key
@@ -113,10 +119,10 @@ abstract class AbstractToolbarActivity : AppCompatActivity(), AdapterView.OnItem
 
 
 
-    private fun openDrawer() {
-        if (drawerlayout?.isDrawerOpen(Gravity.END)!!)
-            drawerlayout.openDrawer(Gravity.END)
-        else drawerlayout.closeDrawer(Gravity.RIGHT)
+    protected fun openDrawer(status: Boolean=false) {
+        if (status)
+            drawerlayout.openDrawer(navigationview)
+        else drawerlayout.closeDrawers()
     }
 
     protected fun isConnected(): Boolean {
@@ -127,6 +133,7 @@ abstract class AbstractToolbarActivity : AppCompatActivity(), AdapterView.OnItem
 
     protected fun setBackToggle() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDefaultDisplayHomeAsUpEnabled(true)
     }
 
 
@@ -153,26 +160,31 @@ abstract class AbstractToolbarActivity : AppCompatActivity(), AdapterView.OnItem
 
         return bundle
     }
-    protected fun Bundle.addNotNull(key:String,value:String?){
-        if(value!=null && !value.equals(""))this.putString(key,value)
+    protected fun makeSearchMap(query:String="",page:Int=1){
+        requestMap= makeSearchRequest(query,page).loadFromBundle() as HashMap<String, String>
     }
-    protected fun Bundle.loadifNotNull(map: HashMap<String,String>,key:String){
+    protected fun Bundle.addNotNull(key:String,value:String?){
+        if(value!=null && !value.equals("null") &&!value.equals(""))
+            this.putString(key,value)
+    }
+    protected fun Bundle.loadifNotNull(map: HashMap<String,String>,key:String): String?{
         val value:String?=this.getString(key)
         if(value!=null && !value.equals("")) map.set(key,value)
+        return value.toString()
     }
 
     protected fun Bundle.loadFromBundle(): Map<String, String> {
         val map=HashMap<String,String>()
-        this.loadifNotNull(map,"query")
-        this.loadifNotNull(map,"priceFrom")
-        this.loadifNotNull(map,"priceTo")
-        this.loadifNotNull(map,"country")
-        this.loadifNotNull(map,"type")
-        this.loadifNotNull(map,"condition")
-        this.loadifNotNull(map,"sort")
+        filterquery=this.loadifNotNull(map,"query")
+        pricefrom=this.loadifNotNull(map,"priceFrom")
+        priceto=this.loadifNotNull(map,"priceTo")
+        country=this.loadifNotNull(map,"country")
+        dealtype=this.loadifNotNull(map,"type")
+        condition=this.loadifNotNull(map,"condition")
+        sortby=this.loadifNotNull(map,"sort")
         this.loadifNotNull(map,"page")
-        this.loadifNotNull(map,"category")
-        this.loadifNotNull(map,"freeShipping")
+        category=this.loadifNotNull(map,"category")
+        if(this.loadifNotNull(map,"freeShipping").equals("true"))freeshipping=true
         return map
     }
     protected fun Bundle.hasExtra(key: String)= if(get(key)!=null && !get(key).equals("")) true else false
@@ -211,7 +223,19 @@ abstract class AbstractToolbarActivity : AppCompatActivity(), AdapterView.OnItem
         if(bundle.hasExtra("freeShipping"))settings_checkbox.isChecked=true
     }
     private fun initFilter() {
-        LoadSettings().execute()
+        if(drawerstatus) {
+            if (!isConnected()) {
+                settings_repeat.visibility = View.VISIBLE
+                settings_repeat.setOnClickListener { v -> loadFilter() }
+                settings_progressbar.visibility = View.INVISIBLE
+            } else loadFilter()
+        }
+    }
+    private fun loadFilter(){
+        if(isConnected()){
+            settings_progressbar.visibility=View.VISIBLE
+            LoadSettings().execute()
+        }
     }
     private fun initOnFilterSelected(){
         settings_category.onItemSelectedListener = this
@@ -259,11 +283,12 @@ abstract class AbstractToolbarActivity : AppCompatActivity(), AdapterView.OnItem
                 settings_sort.adapter = SettingsSpinnerAdapter(layoutInflater, result?.sorts!!)
                 settings_condition.adapter = SettingsSpinnerAdapter(layoutInflater, result?.conditions!!)
                 settings_root.visibility=View.VISIBLE
+                settings_repeat.visibility=View.GONE
                 settings_progressbar.visibility=View.GONE
                 initOnFilterSelected()
             }
             if(intent!=null && intent.hasExtra(HomeActivity.Companion.SEARCH_REQUEST))setSpinnersToFilter(intent.getBundleExtra(HomeActivity.Companion.SEARCH_REQUEST))
-
+            openDrawer(true)
         }
     }
 

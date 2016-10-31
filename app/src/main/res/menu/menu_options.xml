@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-<item android:id="@+id/menu_options_aboutus"
-    android:title="@string/action_about"
-    />
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_options_aboutus"
+        android:title="@string/action_about" />
+    <item
+        android:id="@+id/menu_filter"
+        android:icon="@drawable/ic_filter_outline"
+        android:title="@string/seatch_filter"
+        app:showAsAction="always" />
 </menu>

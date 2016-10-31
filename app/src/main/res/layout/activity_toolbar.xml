@@ -58,7 +58,15 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     />
-
+                <ImageButton
+                    android:id="@+id/settings_repeat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/replay"
+                    android:visibility="invisible"
+                    android:background="@null"
+                    />
                 <LinearLayout
                     android:id="@+id/settings_root"
                     android:layout_width="match_parent"
