@@ -8,18 +8,22 @@ import com.google.gson.annotations.SerializedName
 import java.util.*
 
 
-public data class Product(@SerializedName("title") var title: String, @SerializedName("price") var price: Float, @SerializedName("image") var image: String, @SerializedName("url") var url: String, @SerializedName("shop") var shop: String): Parcelable {
+public data class Product(@SerializedName("title") var title: String,
+                          @SerializedName("price") var price: Float,
+                          @SerializedName("image") var image: String,
+                          @SerializedName("url") var url: String,
+                          @SerializedName("shop") var shop: String): Parcelable {
 
     // aliexpress
     @SerializedName("isFreeShipping") var isFreeShipping: Boolean = false //
-    @SerializedName("oldPrice") var oldPrice: Float = 0.toFloat() //
+    @SerializedName("oldPrice") var oldPrice: Float = 0f //
     @SerializedName("packageType") var packageType: String? = null
 
     // ebay
     @SerializedName("subtitle") var subtitle: String? = null//
     @SerializedName("bestOfferEnabled") var bestOfferEnabled: Boolean = false//
     @SerializedName("buyItNowAvailable") var buyItNowAvailable: Boolean = false//
-    @SerializedName("buyItNowPrice") var buyItNowPrice: Float = 0.toFloat()//
+    @SerializedName("buyItNowPrice") var buyItNowPrice: Float = 0f//
     @SerializedName("listingType") var listingType: String? = null//
     @SerializedName("bidCount") var bidCount: Int = 0//
     @SerializedName("state") var state: String? = null //TODO
@@ -27,21 +31,21 @@ public data class Product(@SerializedName("title") var title: String, @Serialize
     @SerializedName("condition") var condition: String? = null//
     @SerializedName("shippingType") var shippingType: String? = null//
     @SerializedName("shipToLocations") var shipToLocations: List<String>? = null//
-    @SerializedName("shippingServiceCost") var shippingServiceCost: Float = 0.toFloat()//
+    @SerializedName("shippingServiceCost") var shippingServiceCost: Float = 0f//
     @SerializedName("endDate") var endDate: Date? = null//
     @SerializedName("currentDate") var currentDate: Date? = null//
 
     // amazon
     @SerializedName("totalNew") var totalNew: Int = 0//
-    @SerializedName("lowestNewPrice") var lowestNewPrice: Float = 0.toFloat()//
+    @SerializedName("lowestNewPrice") var lowestNewPrice: Float = 0f//
     @SerializedName("totalUsed") var totalUsed: Int = 0//
-    @SerializedName("lowestUsedPrice") var lowestUsedPrice: Float = 0.toFloat()//
+    @SerializedName("lowestUsedPrice") var lowestUsedPrice: Float = 0f//
     @SerializedName("totalCollectible") var totalCollectible: Int = 0//
-    @SerializedName("lowestCollectiblePrice") var lowestCollectiblePrice: Float = 0.toFloat()//
+    @SerializedName("lowestCollectiblePrice") var lowestCollectiblePrice: Float = 0f//
     @SerializedName("totalRefurbished") var totalRefurbished: Int = 0//
-    @SerializedName("lowestRefurbishedPrice") var lowestRefurbishedPrice: Float = 0.toFloat()//
-    @SerializedName("amountSaved") var amountSaved: Float = 0.toFloat()
-    @SerializedName("percentageSaved") var percentageSaved: Float = 0.toFloat()
+    @SerializedName("lowestRefurbishedPrice") var lowestRefurbishedPrice: Float = 0f//
+    @SerializedName("amountSaved") var amountSaved: Float = 0f
+    @SerializedName("percentageSaved") var percentageSaved: Float = 0f
     @SerializedName("availabilityType") var availabilityType: String? = null//
     @SerializedName("isEligibleForSuperSaverShipping") var isEligibleForSuperSaverShipping: Boolean = false
     // oldPrice as for aliexpress

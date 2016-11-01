@@ -10,14 +10,6 @@ import java.util.*
 
 class ResultResponce private constructor(val request: IntpricesRequest) {
 
-    val map=HashMap<String,String>()
-
-    var freeshipping=false
-    var pricefrom=0
-    var priceto=0
-    var category=""
-
-
     private object Holder {
         val singleton= ResultResponce(RestObj.instance)
     }
@@ -26,21 +18,14 @@ class ResultResponce private constructor(val request: IntpricesRequest) {
         val instance= Holder.singleton
     }
 
-    fun getSearchResult(query:String,page: Int): SearchResponce? {
-        map["query"]=query
-        map["page"]=page.toString()
-        val call=this.request?.getProducts(map)
-        val responce = call?.execute()
-        return responce?.body()
-    }
     fun getSearchResult(querymap:Map<String,String>): SearchResponce? {
-        val call=this.request?.getProducts(querymap)
-        val responce = call?.execute()
+        val call= this.request.getProducts(querymap)
+        val responce = call.execute()
         return responce?.body()
     }
 
     fun getSettingsResult(): SettingsResponce? {
-        val call=this.request?.getSettings()
+        val call= this.request.getSettings()
         val responce=call.execute()
         return responce?.body()
     }

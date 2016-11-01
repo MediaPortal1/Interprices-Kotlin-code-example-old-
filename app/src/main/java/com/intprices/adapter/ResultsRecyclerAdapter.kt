@@ -11,7 +11,10 @@ import com.intprices.api.model.Product
 import com.intprices.databinding.ListItemProductBinding
 
 
-class ResultsRecyclerAdapter(val productlist: List<Product>, recyclerView: RecyclerView, pageChangeListener: OnPageChange, loadMoreListener: OnLoadProducts) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ResultsRecyclerAdapter(val productlist: List<Product>,
+                             recyclerView: RecyclerView,
+                             pageChangeListener: OnPageChange,
+                             loadMoreListener: OnLoadProducts) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var isLoading = true
     private val VIEW_TYPE_ITEM = 0

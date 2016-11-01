@@ -48,6 +48,7 @@ public class DataBindingUtil {
             }
         });
     }
+
     @BindingAdapter("bind:TimeLeft")
     public static void setTimeLeft(TextView view, String timeleft){
         String[]split=new String[]{"P","DT","H","M"};

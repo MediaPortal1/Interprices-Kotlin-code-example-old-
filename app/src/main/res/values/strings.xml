@@ -51,6 +51,7 @@
     <string name="end_date">End date</string>
     <string name="current_date">Current date</string>
     <string name="shipping_cost">Shipping coast</string>
+    <string name="shipping_to">Shipping to:</string>
     <string name="total_new">Total new</string>
     <string name="about_content">
         <![CDATA[

@@ -19,8 +19,8 @@ class AboutActivity : AbstractToolbarActivity() {
             versionName = packageManager.getPackageInfo(packageName, 0).versionName
         } catch (e: PackageManager.NameNotFoundException) {e.printStackTrace()}
 
-        about_textview.setText(Html.fromHtml(getString(R.string.about_content,versionName)))
-        about_textview.setMovementMethod(LinkMovementMethod.getInstance())
+        about_textview.text = Html.fromHtml(getString(R.string.about_content,versionName))
+        about_textview.movementMethod = LinkMovementMethod.getInstance()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

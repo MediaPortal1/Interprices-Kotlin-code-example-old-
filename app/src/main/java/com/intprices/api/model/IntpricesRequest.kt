@@ -2,7 +2,7 @@ package com.intprices.api.model
 
 import retrofit2.Call
 import retrofit2.http.GET
-import retrofit2.http.Query
+import retrofit2.http.`@+id/form_home_query`
 import retrofit2.http.QueryMap
 
 /**

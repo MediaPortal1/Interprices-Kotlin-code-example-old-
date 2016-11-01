@@ -27,7 +27,9 @@ class RestObj private constructor() {
             .build()
 
     private fun getGsonFactory() = GsonConverterFactory.create(getGson())
+
     private fun getGson() = GsonBuilder().serializeNulls().setDateFormat("yyyy-MM-dd HH:mm:ss").create()
+
     private fun getOkHttp() = OkHttpClient.Builder()
             .connectTimeout(2, TimeUnit.MINUTES)
             .readTimeout(2, TimeUnit.MINUTES)

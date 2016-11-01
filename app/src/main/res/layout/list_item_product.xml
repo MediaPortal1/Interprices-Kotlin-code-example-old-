@@ -269,11 +269,18 @@
                     android:orientation="horizontal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/shipping_to"
+                        android:visibility="@{product.shipToLocations!=null ? view.VISIBLE : view.GONE}"
+                        />
                 <Spinner
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     bind:shipping="@{product.shipToLocations}"
                     android:visibility="@{product.shipToLocations!=null ? view.VISIBLE : view.GONE}"
+                    android:paddingLeft="@dimen/small_padding"
                     />
                 </LinearLayout>
             </LinearLayout>

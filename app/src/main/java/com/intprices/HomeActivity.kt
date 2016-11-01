@@ -19,26 +19,24 @@ class HomeActivity: AbstractToolbarActivity() {
     }
 
     override fun initViews(state: Bundle?) {
-        query.imeOptions=EditorInfo.IME_ACTION_SEARCH
-        query.setOnEditorActionListener (object : TextView.OnEditorActionListener{
-            override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
-                if(actionId==EditorInfo.IME_ACTION_SEARCH){
-                    startResultActivity()
-                    return true
-                }
-                return false
+        form_home_query.imeOptions=EditorInfo.IME_ACTION_SEARCH
+        form_home_query.setOnEditorActionListener (TextView.OnEditorActionListener { v, actionId, event ->
+            if(actionId==EditorInfo.IME_ACTION_SEARCH){
+                startResultActivity()
+                return@OnEditorActionListener true
             }
+            false
         })
     }
 
     override fun onSearchClick(v: View){
         when(v.id){
         R.id.settings_btn -> startResultActivity(settings_query.text.toString())
-        R.id.btn_search -> startResultActivity()
+        R.id.home_search_btn -> startResultActivity()
         }
     }
 
-    private fun startResultActivity(querytext:String=query.text.toString()){
+    private fun startResultActivity(querytext:String= form_home_query.text.toString()){
         val intent=Intent(this,SearchResultActivity::class.java)
         intent.putExtra(HomeActivity.Companion.SEARCH_REQUEST,makeSearchRequest(querytext))
         startActivity(intent)
