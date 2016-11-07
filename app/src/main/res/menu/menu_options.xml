@@ -4,9 +4,4 @@
     <item
         android:id="@+id/menu_options_aboutus"
         android:title="@string/action_about" />
-    <item
-        android:id="@+id/menu_filter"
-        android:icon="@drawable/ic_filter_outline"
-        android:title="@string/seatch_filter"
-        app:showAsAction="always" />
 </menu>

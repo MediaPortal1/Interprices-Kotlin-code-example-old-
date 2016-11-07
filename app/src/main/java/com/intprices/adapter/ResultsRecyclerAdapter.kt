@@ -1,14 +1,17 @@
 package com.intprices.adapter
 
 import android.databinding.DataBindingUtil
+import android.os.CountDownTimer
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import com.intprices.R
 import com.intprices.api.model.Product
 import com.intprices.databinding.ListItemProductBinding
+import java.util.*
 
 
 class ResultsRecyclerAdapter(val productlist: List<Product>,
@@ -19,6 +22,7 @@ class ResultsRecyclerAdapter(val productlist: List<Product>,
     var isLoading = true
     private val VIEW_TYPE_ITEM = 0
     private val VIEW_TYPE_LOADING = 1
+    var mCounters= HashMap<TextView, CountDownTimer>()
 
     init {
         val linearLayoutManager = recyclerView.getLayoutManager() as LinearLayoutManager

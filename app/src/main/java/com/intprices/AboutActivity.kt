@@ -6,11 +6,18 @@ import android.text.Html
 import android.text.method.LinkMovementMethod
 import android.view.Menu
 import kotlinx.android.synthetic.main.activity_about.*
+import kotlinx.android.synthetic.main.activity_toolbar.*
 
 class AboutActivity : AbstractToolbarActivity() {
 
     override fun setSettings() {
-        setSettings(R.string.title_activity_about, R.layout.activity_about,true,false)
+        setSettings(R.string.title_activity_about, R.layout.activity_about)
+    }
+
+    override fun initViewStub(layoutId: Int) {
+        toolbar_viewstub.layoutResource=layoutId
+        toolbar_viewstub.inflate()
+
     }
 
     override fun initViews(state: Bundle?) {
