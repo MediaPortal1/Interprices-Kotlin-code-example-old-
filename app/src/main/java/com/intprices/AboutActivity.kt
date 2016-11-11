@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.activity_toolbar.*
 class AboutActivity : AbstractToolbarActivity() {
 
     override fun setSettings() {
-        setSettings(R.string.title_activity_about, R.layout.activity_about)
+        setSettings(R.string.title_activity_about, R.layout.activity_about,backToggle = true)
     }
 
     override fun initViewStub(layoutId: Int) {
