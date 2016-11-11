@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Preise</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_example">Example action</string>
+    <string name="action_settings">Einstellungen</string>
+    <string name="nav_item_home">Zuhause</string>
+    <string name="nav_item_deals">Angebote</string>
+    <string name="validation_query_required">Abfrage ist erforderlich,</string>
+    <string name="title_activity_home">Search in Ebay, Amazon, Aliexpress</string>
+    <string name="title_activity_search">Suche</string>
+    <string name="title_activity_deals">Angebote</string>
+    <string name="freeShipping">Freies Verschiffen</string>
+    <string name="search_internal_error">Interner Fehler</string>
+    <string name="search_result_empty">Produkte wurden nicht gefunden. Versuchen Sie einen anderen Abfrage</string>
+    <string name="form_btn_search">Suche</string>
+    <string name="form_label_price">Preis</string>
+    <string name="item_condition">Zustand</string>
+    <string name="item_time_left">Übrige Zeit</string>
+    <string name="item_buy_it_now">Kaufe es jetzt</string>
+    <string name="item_price">Preis</string>
+    <string name="item_bids">Gebote</string>
+    <!-- <string name="item_old_price">old price</string> -->
+    <string name="item_availability">Verfügbarkeit</string>
+    <string name="item_new">neu</string>
+    <string name="item_count_offers">%d Angebote</string>
+    <string name="item_used">benutzt</string>
+    <string name="item_refurbished">renoviert</string>
+    <string name="item_collectible">Sammlerstück</string>
+    <string name="form_category_placeholder">Alle</string>
+    <string name="form_country_placeholder">Alle</string>
+    <string name="form_type_placeholder">Alle</string>
+    <string name="form_condition_placeholder">Alle</string>
+    <string name="form_free_shipping">Kostenloser Versand</string>
+    <string name="item_time_left_expired">Abgelaufen</string>
+    <string name="item_shop">Geschäft</string>
+    <string name="title_activity_about">über</string>
+    <string name="action_about">über</string>
+    <string name="about_content">
+        <![CDATA[
+            <p>Version: %1$s</p>
+            <p>Webseite: <a href="http://www.intprices.com">www.intprices.com</a></p>
+        ]]>
+    </string>
+    <string name="search_hint">Suchanfrage</string>
+    <string name="overview">Search in Ebay, Amazon, Aliexpress</string>
+
+</resources>

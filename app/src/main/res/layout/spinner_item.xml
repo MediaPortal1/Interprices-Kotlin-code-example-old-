@@ -1,16 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/spinnertext"
-    android:textSize="@dimen/text_medium"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:ellipsize="marquee"
-    android:gravity="left"
-    android:paddingTop="5dp"
-    android:paddingBottom="5dp"
-    android:paddingLeft="5dp"
-    android:paddingRight="5dp"
-    android:textColor="@color/lightgray"
     android:background="?attr/selectableItemBackground"
-    />
+    android:paddingLeft="@dimen/small_padding"
+    android:paddingRight="@dimen/small_padding"
+    android:paddingTop="@dimen/medium_padding"
+    android:paddingBottom="@dimen/medium_padding"
+    >
+
+    <TextView
+        android:id="@+id/spinner_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_small"
+        android:textColor="@color/gray"
+        />
+
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/spinnertext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:ellipsize="marquee"
+        android:textColor="@color/gray"
+        android:textSize="@dimen/text_small" />
+</RelativeLayout>

@@ -1,6 +1,5 @@
 package com.intprices.api
 
-import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.intprices.api.model.IntpricesRequest
 import okhttp3.OkHttpClient

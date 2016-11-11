@@ -2,25 +2,26 @@ package com.intprices
 
 import android.app.SearchManager
 import android.content.Context
-import android.graphics.PorterDuff
 import android.os.AsyncTask
 import android.os.Bundle
-import android.support.design.widget.Snackbar
-import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.AutoCompleteTextView
+import android.view.inputmethod.InputMethodManager
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.InterstitialAd
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.intprices.adapter.OnLoadProducts
 import com.intprices.adapter.OnPageChange
 import com.intprices.adapter.ResultsRecyclerAdapter
-import com.intprices.api.ResultResponce
 import com.intprices.api.model.Product
-import kotlinx.android.synthetic.main.activity_result.*
 import kotlinx.android.synthetic.main.activity_drawer.*
+import kotlinx.android.synthetic.main.activity_result.*
 import java.util.*
+
 
 class SearchResultActivity : AbstractFiltersActivity(), OnLoadProducts, OnPageChange {
 
@@ -38,16 +39,15 @@ class SearchResultActivity : AbstractFiltersActivity(), OnLoadProducts, OnPageCh
 
 
     override fun setSettings() {
-        setSettings(R.string.title_activity_search, R.layout.activity_result, R.layout.activity_drawer,false)
+        setSettings(R.string.title_activity_search, R.layout.activity_result, R.layout.activity_drawer, false)
     }
 
-    override fun initFilterHolder() = FiltersHolder(drawer_filter_root,drawer_filter_form_query,
-            drawer_filter_category,drawer_filter_country,
-            drawer_filter_type,drawer_filter_condition,
-            drawer_filter_sort,drawer_filter_checkbox,
-            drawer_filter_edit_from_price,drawer_filter_price_to,
-            drawer_filter_search_btn,drawer_filter_repeat,
-            drawer_filter_progressbar)
+    override fun initFilterHolder() = FiltersHolder(drawer_filter_root, drawer_filter_form_query,
+            drawer_filter_category, drawer_filter_country,
+            drawer_filter_type, drawer_filter_condition,
+            drawer_filter_sort, drawer_filter_freeshipping_seekbar,
+            drawer_filter_edit_from_price, drawer_filter_price_to,
+            drawer_filter_repeat, drawer_filter_progressbar)
 
     override fun initViewStub(layoutId: Int) {
         drawer_viewstub.layoutResource = layoutId
@@ -56,6 +56,8 @@ class SearchResultActivity : AbstractFiltersActivity(), OnLoadProducts, OnPageCh
 
     override fun initViews(state: Bundle?) {
         super.initViews(state)
+//        initAds()
+        initFirebaseAnalitics()
         initProductList()
 
         if (state != null && state.containsKey(listKey)) {
@@ -75,8 +77,41 @@ class SearchResultActivity : AbstractFiltersActivity(), OnLoadProducts, OnPageCh
                 adapter?.notifyDataSetChanged()
             }
         }
-        root_result.setOnRefreshListener({ onClearResults(); tryToLoadResults() })
+
+        root_result.setOnRefreshListener({ onSearchClick() })
         root_result.setColorSchemeResources(R.color.primaryColorAccent)
+        drawer_filter_search_btn.setOnClickListener { onSearchClick(drawer_filter_form_query.text.toString()) }
+    }
+
+    private fun initAds() {
+
+        val adRequest = AdRequest.Builder()
+                .addKeyword("aliexpress")
+                .addKeyword("ebay")
+                .addKeyword("amazon")
+                .addKeyword("taobao")
+                .build()
+
+        val interstitialAd = InterstitialAd(this)
+        interstitialAd.adUnitId = resources.getString(R.string.full_banner_ad_unit_id)
+        interstitialAd.loadAd(adRequest)
+
+        interstitialAd.adListener = object : AdListener() {
+            override fun onAdLoaded() {
+                interstitialAd.show()
+            }
+        }
+    }
+
+    override fun snackbarAction() {
+        tryToLoadResults()
+    }
+
+    override fun initFirebaseAnalitics() {
+        val firebaseAnalytics = FirebaseAnalytics.getInstance(this)
+        val params = Bundle()
+        params.putString("name", SearchResultActivity::class.java.simpleName)
+        firebaseAnalytics.logEvent("activity", params)
     }
 
     private fun openDrawer(status: Boolean = false) {
@@ -119,8 +154,8 @@ class SearchResultActivity : AbstractFiltersActivity(), OnLoadProducts, OnPageCh
     }
 
     private fun noInternet() {
-        Snackbar.make(root_result, getString(R.string.no_internet), Snackbar.LENGTH_LONG)
-                .setAction(getString(R.string.try_again), { tryToLoadResults() }).show()
+        initSnackBar()
+        noInternetSnackBar.show()
         setLoading(NO_INTERNET)
     }
 
@@ -128,6 +163,8 @@ class SearchResultActivity : AbstractFiltersActivity(), OnLoadProducts, OnPageCh
     override fun loadProducts() {
         if (isLoaded) makeSearchMap(request, page)
         LoadResults().execute()
+        if (noInternetSnackBar.isShown)
+            noInternetSnackBar.dismiss()
 
     }
 
@@ -138,6 +175,12 @@ class SearchResultActivity : AbstractFiltersActivity(), OnLoadProducts, OnPageCh
 
     override fun onSearchClick() {
         makeSearchMap()
+        onClearResults()
+        tryToLoadResults()
+    }
+
+    fun onSearchClick(query: String) {
+        makeSearchMap(query)
         onClearResults()
         tryToLoadResults()
     }
@@ -168,9 +211,8 @@ class SearchResultActivity : AbstractFiltersActivity(), OnLoadProducts, OnPageCh
             searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
             searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
-                    makeSearchMap(query.toString())
-                    onClearResults()
-                    tryToLoadResults()
+                    hideKeyboard()
+                    onSearchClick(query as String)
                     return true
                 }
 
@@ -181,10 +223,18 @@ class SearchResultActivity : AbstractFiltersActivity(), OnLoadProducts, OnPageCh
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when(item?.itemId){
+        when (item?.itemId) {
             R.id.menu_filter -> openDrawer(!drawerlayout.isDrawerOpen(navigationview))
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    fun hideKeyboard() {
+        val view = this.currentFocus
+        if (view != null) {
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
+        }
     }
 
     override fun onFiltersLoaded() {

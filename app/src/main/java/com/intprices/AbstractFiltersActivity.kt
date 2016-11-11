@@ -2,11 +2,14 @@ package com.intprices
 
 import android.os.AsyncTask
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.*
 import com.intprices.api.ResultResponce
 import com.intprices.api.model.*
@@ -17,6 +20,7 @@ abstract class AbstractFiltersActivity : AbstractToolbarActivity(), AdapterView.
 
     var responce = ResultResponce.instance
     protected lateinit var filterHolder: FiltersHolder
+    protected lateinit var noInternetSnackBar: Snackbar
 
     protected var request: String = ""
     protected var category: String? = null
@@ -30,26 +34,51 @@ abstract class AbstractFiltersActivity : AbstractToolbarActivity(), AdapterView.
     protected var isFreeShipping: Boolean = false
     protected lateinit var requestMap: HashMap<String, String>
 
-    override fun setSettings() {
-    }
+    abstract override fun setSettings()
 
     override fun initViews(state: Bundle?) {
-        filterHolder=initFilterHolder()
+        filterHolder = initFilterHolder()
         initFilter()
+        initSnackBar()
     }
 
     abstract fun initFilterHolder(): FiltersHolder
 
+    protected fun initSnackBar() {
+        noInternetSnackBar = Snackbar
+                .make(filterHolder.root, getString(R.string.no_internet), Snackbar.LENGTH_INDEFINITE)
+                .setAction(getString(R.string.try_again), { snackbarAction() })
+    }
+
+    abstract fun snackbarAction()
+
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         val key = (parent?.adapter as SettingsSpinnerAdapter).getItem(position)["key"]
         if (!key.isNullOrBlank() || position == 0) {
+            var adapter: SettingsSpinnerAdapter? = null
             when (parent) {
-                filterHolder.category -> category = key
-                filterHolder.condition -> condition = key
-                filterHolder.country -> country = key
-                filterHolder.type -> dealType = key
-                filterHolder.sort -> sortBy = key
+                filterHolder.category -> {
+                    category = key
+                    adapter = filterHolder.category.adapter as SettingsSpinnerAdapter
+                }
+                filterHolder.condition -> {
+                    condition = key
+                    adapter = filterHolder.condition.adapter as SettingsSpinnerAdapter
+                }
+                filterHolder.country -> {
+                    country = key
+                    adapter = filterHolder.country.adapter as SettingsSpinnerAdapter
+                }
+                filterHolder.type -> {
+                    dealType = key
+                    adapter = filterHolder.condition.adapter as SettingsSpinnerAdapter
+                }
+                filterHolder.sort -> {
+                    sortBy = key
+                    adapter = filterHolder.sort.adapter as SettingsSpinnerAdapter
+                }
             }
+            if (adapter != null) adapter.selectedItem = position
         }
     }
 
@@ -58,32 +87,54 @@ abstract class AbstractFiltersActivity : AbstractToolbarActivity(), AdapterView.
     override fun onNothingSelected(parent: AdapterView<*>?) {
         when (parent) {
             filterHolder.category -> category = null
-            filterHolder.condition-> condition = null
-            filterHolder.country-> country = null
-            filterHolder.type-> dealType = null
+            filterHolder.condition -> condition = null
+            filterHolder.country -> country = null
+            filterHolder.type -> dealType = null
             filterHolder.sort -> sortBy = null
         }
     }
 
-    private fun loadFilter() {
+    protected fun loadFilter() {
         if (isConnected()) {
+            filterHolder.repeatBtn.visibility = View.INVISIBLE
             filterHolder.progressBar.visibility = View.VISIBLE
             LoadSettings().execute()
+        } else {
+            initSnackBar()
+            noInternetSnackBar.show()
         }
     }
 
     private fun initFilter() {
+        filterHolder.repeatBtn.setOnClickListener { v ->
+            val repeatAnimation = AnimationUtils.loadAnimation(baseContext, R.anim.repeat_btn)
+            repeatAnimation.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationRepeat(p0: Animation?) {
+                }
+
+                override fun onAnimationStart(p0: Animation?) {
+                }
+
+                override fun onAnimationEnd(p0: Animation?) {
+                    loadFilter()
+                }
+            })
+            v.startAnimation(repeatAnimation)
+        }
+
         if (!isConnected()) {
             filterHolder.repeatBtn.visibility = View.VISIBLE
-            filterHolder.repeatBtn.setOnClickListener { v -> loadFilter() }
+
             filterHolder.progressBar.visibility = View.INVISIBLE
         } else loadFilter()
     }
 
     protected abstract fun onFiltersLoaded()
 
+    protected abstract fun initFirebaseAnalitics()
+
     protected fun makeSearchRequest(query: String = "", page: Int = 1): Bundle {
-        var bundle = Bundle()
+        val bundle = Bundle()
 
         if (!query.isNullOrBlank()) bundle.addNotNull("query", query)
         else if (!filterFormQuery.isNullOrEmpty())
@@ -113,9 +164,9 @@ abstract class AbstractFiltersActivity : AbstractToolbarActivity(), AdapterView.
     }
 
     protected fun Bundle.loadifNotNull(map: HashMap<String, String>, key: String): String {
-        val value:String?=this.getString(key)
-        if (!value.isNullOrBlank()) map[key] = value.toString()
-        return value.toString()
+        val value: String? = this.getString(key)
+        if (!value.isNullOrBlank()) map[key] = value as String
+        return value ?: ""
     }
 
     protected fun Bundle.loadFromBundle(): Map<String, String> {
@@ -129,11 +180,11 @@ abstract class AbstractFiltersActivity : AbstractToolbarActivity(), AdapterView.
         sortBy = this.loadifNotNull(map, "sort")
         this.loadifNotNull(map, "page")
         category = this.loadifNotNull(map, "category")
-        if (this.loadifNotNull(map, "freeShipping").equals("true")) isFreeShipping = true
+        if (this.loadifNotNull(map, "freeShipping") == "true") isFreeShipping = true
         return map
     }
 
-    protected fun Bundle.hasExtra(key: String) = if (get(key)!= null && get(key).toString().isNotBlank()) true else false
+    protected fun Bundle.hasExtra(key: String) = if (get(key) != null && get(key).toString().isNotBlank()) true else false
 
     protected fun setSpinnersToFilter(bundle: Bundle) {
         if (bundle.hasExtra("query")) filterHolder.formSearch.setText(bundle.getString("query"))
@@ -209,13 +260,13 @@ abstract class AbstractFiltersActivity : AbstractToolbarActivity(), AdapterView.
                 if (!s?.toString().isNullOrBlank()) filterFormQuery = s.toString()
             }
         })
-        filterHolder.freeShipping.setOnCheckedChangeListener { button, b -> isFreeShipping = b }
-        filterHolder.searchButton.setOnClickListener { onSearchClick() }
+        filterHolder.freeShipping.setOnCheckedChangeListener { compoundButton, b -> isFreeShipping = b }
     }
 
     /******SETTINGS ADAPTER*****/
-    class SettingsSpinnerAdapter(val inflator: LayoutInflater, val items: List<SettingsItem>) : BaseAdapter() {
+    inner class SettingsSpinnerAdapter(val inflator: LayoutInflater, val items: List<SettingsItem>) : BaseAdapter() {
         val emptyMap = HashMap<String, String>()
+        var selectedItem = 0
 
         init {
             emptyMap["key"] = ""
@@ -228,6 +279,14 @@ abstract class AbstractFiltersActivity : AbstractToolbarActivity(), AdapterView.
                 view = inflator.inflate(R.layout.spinner_item, parent, false)
             }
             val textview = view?.findViewById(R.id.spinnertext) as TextView
+            val label = view?.findViewById(R.id.spinner_label) as TextView
+            when (items[0]) {
+                is Category -> label.text = getString(R.string.label_category)
+                is Country -> label.text = getString(R.string.label_country)
+                is Type -> label.text = getString(R.string.label_type)
+                is Condition -> label.text = getString(R.string.label_condition)
+                is Sort -> label.text = getString(R.string.label_sort_by)
+            }
             if (position == 0) {
                 when (items[position]) {
                     is Category -> textview.text = view?.context?.getString(R.string.form_category_placeholder)
@@ -244,7 +303,7 @@ abstract class AbstractFiltersActivity : AbstractToolbarActivity(), AdapterView.
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup?): View {
             var view = convertView
             if (view == null) {
-                view = inflator.inflate(R.layout.spinner_item, parent, false)
+                view = inflator.inflate(R.layout.spinner_dropdown_item, parent, false)
             }
             val textview = view?.findViewById(R.id.spinnertext) as TextView
             if (position == 0) {
@@ -257,8 +316,12 @@ abstract class AbstractFiltersActivity : AbstractToolbarActivity(), AdapterView.
                 }
             } else
                 textview.text = items[if (items[0] !is Sort) position - 1 else position].getMap()["name"]
+            val radioBtn = view?.findViewById(R.id.spiiner_radio_btn) as RadioButton
+            if (position == selectedItem) radioBtn.isChecked = true else radioBtn.isChecked = false
+
             return view!!
         }
+
 
         override fun getItem(position: Int): Map<String, String> = if (position != 0) items[position - 1].getMap() else emptyMap
 
@@ -307,6 +370,7 @@ abstract class AbstractFiltersActivity : AbstractToolbarActivity(), AdapterView.
             onFiltersLoaded()
         }
     }
+
     class FiltersHolder(val root: ViewGroup,
                         val formSearch: EditText,
                         val category: Spinner,
@@ -314,10 +378,9 @@ abstract class AbstractFiltersActivity : AbstractToolbarActivity(), AdapterView.
                         val type: Spinner,
                         val condition: Spinner,
                         val sort: Spinner,
-                        val freeShipping: CheckBox,
+                        val freeShipping: Switch,
                         val priceFrom: EditText,
                         val priceTo: EditText,
-                        val searchButton: Button,
                         val repeatBtn: ImageButton,
                         val progressBar: ProgressBar)
 }

@@ -5,23 +5,17 @@ import android.databinding.BindingAdapter;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.os.CountDownTimer;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.intprices.R;
 import com.intprices.api.model.Product;
 import com.squareup.picasso.Picasso;
 
-import java.util.List;
-
-import static com.intprices.util.Timeleft.timeLeftFormatted;
-
-/**
- * Created by Alex Poltavets on 20.10.2016.
- */
+import static com.intprices.util.TimeLeft.timeLeftFormatted;
 
 public class DataBindingUtil {
 
@@ -52,26 +46,15 @@ public class DataBindingUtil {
         });
     }
 
-    @BindingAdapter("bind:TimeLeft")
-    public static void setTimeLeft(TextView view, String timeleft) {
-        String[] split = new String[]{"P", "DT", "H", "M"};
-    }
-
-    @BindingAdapter("bind:shipping")
-    public static void shippingTo(Spinner view, List<String> shipToLocations) {
-        if (shipToLocations != null)
-            view.setAdapter(new ArrayAdapter<>(view.getContext(), R.layout.spinner_item, R.id.spinnertext, shipToLocations));
-    }
-
-
     @BindingAdapter("bind:timer")
-    public static void timeLeft(final TextView view, Product product) {
+    public static void timeLeft(final TextView view, final Product product) {
         CountDownTimer timeLeftTimer;
+        Object timerTag = view.getTag();
 
-        if (product.getEndDate() != null && product.getCurrentDate() != null) {
+        if (product.getEndDate() != null && product.getCurrentDate() != null && timerTag == null) {
             timeLeftTimer = new CountDownTimer(product.getEndDate().getTime() - product.getCurrentDate().getTime(), 1000) {
                 public void onTick(long millisUntilFinished) {
-                            view.setText(String.format("%s: %s",
+                    view.setText(String.format("%s: %s",
                             view.getResources().getString(R.string.item_time_left),
                             timeLeftFormatted(millisUntilFinished, view.getContext())
                     ));
@@ -79,15 +62,19 @@ public class DataBindingUtil {
 
                 public void onFinish() {
                     view.setText(view.getResources().getString(R.string.item_time_left_expired));
+                    product.setState("Expired");
                 }
             };
+            view.setTag(timeLeftTimer);
             timeLeftTimer.start();
             view.setVisibility(View.VISIBLE);
         }
     }
 
-    @BindingAdapter("bind:state")
-    public static void setState(View view,String state){
-        if(state!=null && !state.equals("") &&!state.equals("Active"))view.setBackgroundColor(view.getResources().getColor(R.color.lightgray,null));
+    @BindingAdapter("app:cardBackgroundColor")
+    public static void setState(CardView view, Product product) {
+        if (product.getState() != null && product.getState().equals("Expired"))
+            view.setCardBackgroundColor(ContextCompat.getColor(view.getContext(), R.color.whitegray)
+            );
     }
 }

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="action_example">Example action</string>
+
+    <string name="app_name">Цэны</string>
+    <string name="navigation_drawer_open">Открыть навигацию</string>
+    <string name="navigation_drawer_close">Закрыть навигацию</string>
+    <string name="action_settings">Налады</string>
+    <string name="nav_item_home">Галоўная</string>
+    <string name="nav_item_deals">Групавыя закупкі</string>
+    <string name="validation_query_required">Калі ласка, увядзіце запыт</string>
+    <string name="title_activity_home">Поиск на Ebay, Amazon и Aliexpress</string>
+    <string name="title_activity_search">Пошук</string>
+    <string name="title_activity_deals">Групавыя закупкі</string>
+    <string name="freeShipping">Бясплатная дастаўка</string>
+    <string name="search_internal_error">Внутренняя ошибка</string>
+    <string name="search_result_empty">Нічога не знойдзена</string>
+    <string name="form_btn_search">Пошук</string>
+    <string name="form_label_price">Цана</string>
+    <string name="item_condition">Стан</string>
+    <string name="item_time_left">Да заканчэння</string>
+    <string name="item_buy_it_now">Купіць цяпер</string>
+    <string name="item_price">Цана</string>
+    <string name="item_bids">Ставак</string>
+    <!-- <string name="item_old_price">old price</string> -->
+    <string name="item_availability">Даступнасць</string>
+    <string name="item_new">новы</string>
+    <string name="item_count_offers">%d прапановы</string>
+    <string name="item_used">б/у</string>
+    <string name="item_refurbished">абноўлены</string>
+    <string name="item_collectible">калекцыйны</string>
+    <string name="form_category_placeholder">--усе катэгорыі--</string>
+    <string name="form_country_placeholder">--усе краіны--</string>
+    <string name="form_type_placeholder">--усе тыпы--</string>
+    <string name="form_condition_placeholder">--любое стан--</string>
+    <string name="form_free_shipping">Бясплатная дастаўка</string>
+    <string name="item_time_left_expired">Завершаны</string>
+    <string name="item_shop">Крама</string>
+    <string name="title_activity_about">Пра нас</string>
+    <string name="action_about">Пра нас</string>
+    <string name="about_content">
+        <![CDATA[
+            <p>Версія: %1$s</p>
+            <p>Сайт: <a href="http://www.intprices.com">www.intprices.com</a></p>
+        ]]>
+    </string>
+    <string name="search_hint">Поисковой запрос</string>
+    <string name="overview">Поиск на Ebay, Amazon и Aliexpress</string>
+
+</resources>

@@ -7,9 +7,7 @@ import android.support.annotation.IdRes
 import android.support.annotation.LayoutRes
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
-import com.intprices.api.ResultResponce
 import kotlinx.android.synthetic.main.app_bar_layout.*
-import java.util.*
 
 
 abstract class AbstractToolbarActivity : AppCompatActivity() {
@@ -26,16 +24,17 @@ abstract class AbstractToolbarActivity : AppCompatActivity() {
 
     protected abstract fun initViews(state: Bundle?)
 
-    open protected fun setSettings(@IdRes title: Int, @LayoutRes layoutContentId: Int,@LayoutRes layoutContainerId: Int=R.layout.activity_toolbar,backToggle: Boolean = false) {
+    open protected fun setSettings(@IdRes title: Int, @LayoutRes layoutContentId: Int, @LayoutRes layoutContainerId: Int = R.layout.activity_toolbar, backToggle: Boolean = false) {
         activityTitle = title
         setContentLayout(layoutContainerId)
         initViewStub(layoutContentId)
         initToolbar(backToggle)
     }
 
-    open protected fun setContentLayout(@LayoutRes activityLayout: Int){
+    open protected fun setContentLayout(@LayoutRes activityLayout: Int) {
         setContentView(activityLayout)
     }
+
     protected abstract fun initViewStub(@LayoutRes layoutId: Int)
 
     private fun initToolbar(backToggle: Boolean) {
@@ -52,7 +51,7 @@ abstract class AbstractToolbarActivity : AppCompatActivity() {
     protected fun isConnected(): Boolean {
         val connMgr = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val networkInfo = connMgr.activeNetworkInfo
-        return networkInfo.isConnected
+        return networkInfo?.isConnected ?: false
     }
 
     protected fun setBackToggle() {

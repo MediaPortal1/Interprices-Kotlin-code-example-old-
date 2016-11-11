@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground">
+
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/spinnertext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="marquee"
+        android:focusable="false"
+        android:gravity="left"
+        android:paddingBottom="@dimen/medium_padding"
+        android:paddingLeft="@dimen/small_padding"
+        android:paddingTop="@dimen/medium_padding"
+        android:textColor="@color/gray"
+        android:textSize="@dimen/text_medium" />
+
+    <RadioButton
+        android:id="@+id/spiiner_radio_btn"
+        style="@style/RadioButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:focusable="false"
+        android:clickable="false"
+        android:paddingRight="@dimen/small_padding" />
+</RelativeLayout>

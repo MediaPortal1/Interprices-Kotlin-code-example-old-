@@ -1,11 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Intprices</string>
 
-    <!--ADMOB-->
-    <string name="banner_native_medium_ad_unit_id" translatable="false">ca-app-pub-6747456021911221/1134162798</string>
-    <string name="full_banner_ad_unit_id" translatable="false">ca-app-pub-6747456021911221/6573892390</string>
-
-    <!--OTHER-->
+    <string name="app_name">Prices</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>
@@ -34,33 +30,14 @@
     <string name="item_refurbished">refurbished</string>
     <string name="item_collectible">collectible</string>
     <string name="form_category_placeholder">All</string>
-    <string name="form_country_placeholder">--All countries--</string>
-    <string name="form_type_placeholder">--All types--</string>
-    <string name="form_condition_placeholder">--All conditions--</string>
+    <string name="form_country_placeholder">All</string>
+    <string name="form_type_placeholder">All</string>
+    <string name="form_condition_placeholder">All</string>
     <string name="form_free_shipping">Free shipping</string>
     <string name="item_time_left_expired">Expired</string>
     <string name="item_shop">Shop</string>
     <string name="title_activity_about">About</string>
     <string name="action_about">About</string>
-    <string name="no_internet">No internet connection</string>
-    <string name="try_again">Try again</string>
-    <string name="search_filter">Search filter</string>
-    <string name="shipping_type">Shipping type</string>
-    <string name="listing_type">Listing type</string>
-    <string name="best_offered">Best offered</string>
-    <string name="end_date">End date</string>
-    <string name="current_date">Current date</string>
-    <string name="shipping_cost">Shipping coast</string>
-    <string name="min_price">Min</string>
-    <string name="max_price">Max</string>
-    <string name="total_new">Total new</string>
-    <string name="label_sort_by">Sort by</string>
-    <string name="label_category">Category</string>
-    <string name="label_type">Type</string>
-    <string name="label_condition">Condition</string>
-    <string name="label_country">Country</string>
-    <string name="repeat">Repeat</string>
-    <string name="shipping_to">Shipping to</string>
     <string name="about_content">
         <![CDATA[
             <p>Version: %1$s</p>
@@ -69,11 +46,5 @@
     </string>
     <string name="search_hint">Search query</string>
     <string name="overview">Search in Ebay, Amazon and Aliexpress</string>
-
-    <!--Time formats-->
-    <string name="time_days">%1$d day(s) %2$d hour(s)</string>
-    <string name="time_hours">%1$d:%2$d:%3$d</string>
-    <string name="time_minutes">%1$d:%2$d</string>
-    <string name="time_second">%1$d second(s)</string>
 
 </resources>

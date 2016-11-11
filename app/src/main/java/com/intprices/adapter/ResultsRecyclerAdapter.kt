@@ -22,7 +22,7 @@ class ResultsRecyclerAdapter(val productlist: List<Product>,
     var isLoading = true
     private val VIEW_TYPE_ITEM = 0
     private val VIEW_TYPE_LOADING = 1
-    var mCounters= HashMap<TextView, CountDownTimer>()
+    var mCounters = HashMap<TextView, CountDownTimer>()
 
     init {
         val linearLayoutManager = recyclerView.getLayoutManager() as LinearLayoutManager
@@ -38,7 +38,6 @@ class ResultsRecyclerAdapter(val productlist: List<Product>,
                 visibleItemCount = recyclerView.childCount
                 totalItemCount = linearLayoutManager.getItemCount()
                 firstVisibleItem = linearLayoutManager.findFirstVisibleItemPosition()
-                val lastcountitem = linearLayoutManager.findLastVisibleItemPosition()
 
                 if (pageChangeListener.isLastPage()) {
                     return
@@ -51,7 +50,7 @@ class ResultsRecyclerAdapter(val productlist: List<Product>,
                             pageChangeListener.incrementPage()
                         }
                     }
-                    if (!isLoading && totalItemCount - visibleItemCount <= firstVisibleItem + visibleThreshold) {
+                    if (!isLoading && firstVisibleItem + visibleThreshold >= totalItemCount - visibleItemCount) {
                         loadMoreListener.loadProducts()
                         isLoading = true
                     }
