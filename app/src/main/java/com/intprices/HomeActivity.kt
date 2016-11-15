@@ -39,7 +39,7 @@ class HomeActivity : AbstractFiltersActivity() {
 
     override fun initViews(state: Bundle?) {
         super.initViews(state)
-        form_home_query.imeOptions = EditorInfo.IME_ACTION_SEARCH
+        form_home_query.imeOptions = EditorInfo.IME_ACTION_SEARCH or EditorInfo.IME_FLAG_NO_FULLSCREEN
         form_home_query.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 startResultActivity()
@@ -51,7 +51,7 @@ class HomeActivity : AbstractFiltersActivity() {
         initFirebaseAnalitics()
     }
 
-    override fun snackbarAction() {
+    override fun snackBarAction() {
         loadFilter()
     }
 
@@ -85,6 +85,7 @@ class HomeActivity : AbstractFiltersActivity() {
         startResultActivity()
     }
 
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_options, menu)
         return true
@@ -98,9 +99,9 @@ class HomeActivity : AbstractFiltersActivity() {
         return true
     }
 
-    private fun startResultActivity(querytext: String = form_home_query.text.toString()) {
+    private fun startResultActivity(queryText: String = form_home_query.text.toString()) {
         val intent = Intent(this, SearchResultActivity::class.java)
-        intent.putExtra(HomeActivity.Companion.SEARCH_REQUEST, makeSearchRequest(querytext))
+        intent.putExtra(HomeActivity.Companion.SEARCH_REQUEST, makeSearchRequest(queryText))
         startActivity(intent)
     }
 

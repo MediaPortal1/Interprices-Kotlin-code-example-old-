@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.support.annotation.IdRes
 import android.support.annotation.LayoutRes
 import android.support.v7.app.AppCompatActivity
-import android.view.Menu
+import android.view.inputmethod.InputMethodManager
 import kotlinx.android.synthetic.main.app_bar_layout.*
 
 
@@ -43,11 +43,6 @@ abstract class AbstractToolbarActivity : AppCompatActivity() {
         if (backToggle) setBackToggle()
     }
 
-    override fun onOptionsMenuClosed(menu: Menu?) {
-        super.onOptionsMenuClosed(menu)
-        menu?.clear()
-    }
-
     protected fun isConnected(): Boolean {
         val connMgr = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val networkInfo = connMgr.activeNetworkInfo
@@ -56,7 +51,15 @@ abstract class AbstractToolbarActivity : AppCompatActivity() {
 
     protected fun setBackToggle() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDefaultDisplayHomeAsUpEnabled(true)
+        toolbar.setNavigationOnClickListener { finish() }
+    }
+
+    protected fun hideKeyboard() {
+        val view = this.currentFocus
+        if (view != null) {
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
+        }
     }
 
 }

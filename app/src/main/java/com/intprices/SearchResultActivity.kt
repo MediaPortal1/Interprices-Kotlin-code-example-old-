@@ -9,7 +9,8 @@ import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.view.inputmethod.InputMethodManager
+import android.view.inputmethod.EditorInfo
+import android.widget.TextView
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.InterstitialAd
@@ -27,6 +28,7 @@ class SearchResultActivity : AbstractFiltersActivity(), OnLoadProducts, OnPageCh
 
 
     private var page = 1
+    private var lastPage = 1
     private var productList = ArrayList<Product>()
     private var adapter: ResultsRecyclerAdapter? = null
     private var isLoaded = false
@@ -81,6 +83,17 @@ class SearchResultActivity : AbstractFiltersActivity(), OnLoadProducts, OnPageCh
         root_result.setOnRefreshListener({ onSearchClick() })
         root_result.setColorSchemeResources(R.color.primaryColorAccent)
         drawer_filter_search_btn.setOnClickListener { onSearchClick(drawer_filter_form_query.text.toString()) }
+        drawer_filter_form_query.imeOptions = EditorInfo.IME_ACTION_SEARCH or EditorInfo.IME_FLAG_NO_FULLSCREEN
+        drawer_filter_form_query.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                request = drawer_filter_form_query.text.toString()
+                hideKeyboard()
+                onSearchClick(drawer_filter_form_query.text.toString())
+                return@OnEditorActionListener true
+            }
+            false
+        })
+
     }
 
     private fun initAds() {
@@ -103,7 +116,7 @@ class SearchResultActivity : AbstractFiltersActivity(), OnLoadProducts, OnPageCh
         }
     }
 
-    override fun snackbarAction() {
+    override fun snackBarAction() {
         tryToLoadResults()
     }
 
@@ -185,7 +198,7 @@ class SearchResultActivity : AbstractFiltersActivity(), OnLoadProducts, OnPageCh
         tryToLoadResults()
     }
 
-    override fun isLastPage() = false
+    override fun isLastPage() = page>=lastPage
 
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
@@ -211,9 +224,14 @@ class SearchResultActivity : AbstractFiltersActivity(), OnLoadProducts, OnPageCh
             searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
             searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
-                    hideKeyboard()
-                    onSearchClick(query as String)
-                    return true
+                    if(query !=null) {
+                        hideKeyboard()
+                        cleanFilters()
+                        request = query
+                        drawer_filter_form_query.setText(query)
+                        onSearchClick(query)
+                        return true
+                    } else return false
                 }
 
                 override fun onQueryTextChange(newText: String?): Boolean = true
@@ -229,16 +247,8 @@ class SearchResultActivity : AbstractFiltersActivity(), OnLoadProducts, OnPageCh
         return super.onOptionsItemSelected(item)
     }
 
-    fun hideKeyboard() {
-        val view = this.currentFocus
-        if (view != null) {
-            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(view.windowToken, 0)
-        }
-    }
 
     override fun onFiltersLoaded() {
-        openDrawer(true)
     }
 
     inner class LoadResults() : AsyncTask<Int, Void, List<Product>>() {
@@ -251,7 +261,11 @@ class SearchResultActivity : AbstractFiltersActivity(), OnLoadProducts, OnPageCh
         }
 
         override fun doInBackground(vararg params: Int?): List<Product>? {
-            return responce.getSearchResult(requestMap)?.products
+            val result = responce.getSearchResult(requestMap)
+            if (result != null) {
+                lastPage = result.totalPages.total
+                return result.products
+            } else return null
         }
 
         override fun onPostExecute(result: List<Product>?) {

@@ -10,15 +10,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.view.inputmethod.EditorInfo
 import android.widget.*
-import com.intprices.api.ResultResponce
+import com.intprices.api.ResultResponse
 import com.intprices.api.model.*
 import java.util.*
 
 
 abstract class AbstractFiltersActivity : AbstractToolbarActivity(), AdapterView.OnItemSelectedListener {
 
-    var responce = ResultResponce.instance
+    var responce = ResultResponse.instance
     protected lateinit var filterHolder: FiltersHolder
     protected lateinit var noInternetSnackBar: Snackbar
 
@@ -47,10 +48,10 @@ abstract class AbstractFiltersActivity : AbstractToolbarActivity(), AdapterView.
     protected fun initSnackBar() {
         noInternetSnackBar = Snackbar
                 .make(filterHolder.root, getString(R.string.no_internet), Snackbar.LENGTH_INDEFINITE)
-                .setAction(getString(R.string.try_again), { snackbarAction() })
+                .setAction(getString(R.string.try_again), { snackBarAction() })
     }
 
-    abstract fun snackbarAction()
+    abstract fun snackBarAction()
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         val key = (parent?.adapter as SettingsSpinnerAdapter).getItem(position)["key"]
@@ -71,10 +72,10 @@ abstract class AbstractFiltersActivity : AbstractToolbarActivity(), AdapterView.
                 }
                 filterHolder.type -> {
                     dealType = key
-                    adapter = filterHolder.condition.adapter as SettingsSpinnerAdapter
+                    adapter = filterHolder.type.adapter as SettingsSpinnerAdapter
                 }
                 filterHolder.sort -> {
-                    sortBy = key
+                    if (position == 0) sortBy = "relevance" else if (position == 1) sortBy = "price"
                     adapter = filterHolder.sort.adapter as SettingsSpinnerAdapter
                 }
             }
@@ -84,15 +85,7 @@ abstract class AbstractFiltersActivity : AbstractToolbarActivity(), AdapterView.
 
     abstract protected fun onSearchClick()
 
-    override fun onNothingSelected(parent: AdapterView<*>?) {
-        when (parent) {
-            filterHolder.category -> category = null
-            filterHolder.condition -> condition = null
-            filterHolder.country -> country = null
-            filterHolder.type -> dealType = null
-            filterHolder.sort -> sortBy = null
-        }
-    }
+    override fun onNothingSelected(parent: AdapterView<*>?) {}
 
     protected fun loadFilter() {
         if (isConnected()) {
@@ -106,6 +99,12 @@ abstract class AbstractFiltersActivity : AbstractToolbarActivity(), AdapterView.
     }
 
     private fun initFilter() {
+
+        if (!isConnected()) {
+            filterHolder.repeatBtn.visibility = View.VISIBLE
+            filterHolder.progressBar.visibility = View.INVISIBLE
+        } else loadFilter()
+
         filterHolder.repeatBtn.setOnClickListener { v ->
             val repeatAnimation = AnimationUtils.loadAnimation(baseContext, R.anim.repeat_btn)
             repeatAnimation.setAnimationListener(object : Animation.AnimationListener {
@@ -122,11 +121,25 @@ abstract class AbstractFiltersActivity : AbstractToolbarActivity(), AdapterView.
             v.startAnimation(repeatAnimation)
         }
 
-        if (!isConnected()) {
-            filterHolder.repeatBtn.visibility = View.VISIBLE
-
-            filterHolder.progressBar.visibility = View.INVISIBLE
-        } else loadFilter()
+        filterHolder.priceFrom.imeOptions = EditorInfo.IME_ACTION_SEARCH
+        filterHolder.priceFrom.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                priceFrom
+                hideKeyboard()
+                 onSearchClick()
+                return@OnEditorActionListener true
+            }
+            false
+        })
+        filterHolder.priceTo.imeOptions = EditorInfo.IME_ACTION_SEARCH
+        filterHolder.priceTo.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                hideKeyboard()
+                onSearchClick()
+                return@OnEditorActionListener true
+            }
+            false
+        })
     }
 
     protected abstract fun onFiltersLoaded()
@@ -141,7 +154,9 @@ abstract class AbstractFiltersActivity : AbstractToolbarActivity(), AdapterView.
             bundle.addNotNull("query", filterFormQuery)
         else bundle.addNotNull("query", request)
 
-        bundle.addNotNull("priceFrom", priceFrom)
+        if (priceFrom == null || priceFrom.isNullOrBlank()) bundle.putString("priceFrom", "0")
+        else bundle.putString("priceFrom", priceFrom)
+
         bundle.addNotNull("priceTo", priceTo)
         bundle.addNotNull("country", country)
         bundle.addNotNull("type", dealType)
@@ -163,7 +178,7 @@ abstract class AbstractFiltersActivity : AbstractToolbarActivity(), AdapterView.
             this.putString(key, value)
     }
 
-    protected fun Bundle.loadifNotNull(map: HashMap<String, String>, key: String): String {
+    protected fun Bundle.loadIfNotNull(map: HashMap<String, String>, key: String): String {
         val value: String? = this.getString(key)
         if (!value.isNullOrBlank()) map[key] = value as String
         return value ?: ""
@@ -171,17 +186,37 @@ abstract class AbstractFiltersActivity : AbstractToolbarActivity(), AdapterView.
 
     protected fun Bundle.loadFromBundle(): Map<String, String> {
         val map = HashMap<String, String>()
-        filterFormQuery = this.loadifNotNull(map, "query")
-        priceFrom = this.loadifNotNull(map, "priceFrom")
-        priceTo = this.loadifNotNull(map, "priceTo")
-        country = this.loadifNotNull(map, "country")
-        dealType = this.loadifNotNull(map, "type")
-        condition = this.loadifNotNull(map, "condition")
-        sortBy = this.loadifNotNull(map, "sort")
-        this.loadifNotNull(map, "page")
-        category = this.loadifNotNull(map, "category")
-        if (this.loadifNotNull(map, "freeShipping") == "true") isFreeShipping = true
+        filterFormQuery = this.loadIfNotNull(map, "query")
+        priceFrom = this.loadIfNotNull(map, "priceFrom")
+        priceTo = this.loadIfNotNull(map, "priceTo")
+        country = this.loadIfNotNull(map, "country")
+        dealType = this.loadIfNotNull(map, "type")
+        condition = this.loadIfNotNull(map, "condition")
+        sortBy = this.loadIfNotNull(map, "sort")
+        this.loadIfNotNull(map, "page")
+        category = this.loadIfNotNull(map, "category")
+        if (this.loadIfNotNull(map, "freeShipping") == "true") isFreeShipping = true
         return map
+    }
+
+    protected fun cleanFilters() {
+        filterFormQuery = null
+        priceFrom = null
+        priceTo = null
+        country = null
+        dealType = null
+        condition = null
+        sortBy = null
+        category = null
+        isFreeShipping = false
+        filterHolder.country.setSelection(0)
+        filterHolder.condition.setSelection(0)
+        filterHolder.type.setSelection(0)
+        filterHolder.category.setSelection(0)
+        filterHolder.sort.setSelection(0)
+        filterHolder.freeShipping.isChecked = false
+        filterHolder.priceFrom.text.clear()
+        filterHolder.priceTo.text.clear()
     }
 
     protected fun Bundle.hasExtra(key: String) = if (get(key) != null && get(key).toString().isNotBlank()) true else false
@@ -196,26 +231,35 @@ abstract class AbstractFiltersActivity : AbstractToolbarActivity(), AdapterView.
             adapter = filterHolder.country.adapter as SettingsSpinnerAdapter?
             position = adapter?.getPositionByKey(bundle.getString("country"))!!
             filterHolder.country.setSelection(position)
+            adapter?.selectedItem = position
         }
         if (bundle.hasExtra("type")) {
             adapter = filterHolder.type.adapter as SettingsSpinnerAdapter?
             position = adapter?.getPositionByKey(bundle.getString("type"))!!
             filterHolder.type.setSelection(position)
+            adapter?.selectedItem = position
         }
         if (bundle.hasExtra("condition")) {
             adapter = filterHolder.condition.adapter as SettingsSpinnerAdapter?
             position = adapter?.getPositionByKey(bundle.getString("condition"))!!
             filterHolder.condition.setSelection(position)
+            adapter?.selectedItem = position
         }
         if (bundle.hasExtra("sort")) {
             adapter = filterHolder.sort.adapter as SettingsSpinnerAdapter?
-            position = adapter?.getPositionByKey(bundle.getString("sort"))!!
+            position = when (bundle.getString("sort")) {
+                "relevance" -> 0
+                "price" -> 1
+                else -> 0
+            }
             filterHolder.sort.setSelection(position)
+            adapter?.selectedItem = position
         }
         if (bundle.hasExtra("category")) {
             adapter = filterHolder.category.adapter as SettingsSpinnerAdapter?
             position = adapter?.getPositionByKey(bundle.getString("category"))!!
             filterHolder.category.setSelection(position)
+            adapter?.selectedItem = position
         }
         if (bundle.hasExtra("freeShipping")) filterHolder.freeShipping.isChecked = true
     }
@@ -235,6 +279,7 @@ abstract class AbstractFiltersActivity : AbstractToolbarActivity(), AdapterView.
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (!s?.toString().isNullOrBlank()) priceFrom = s.toString()
+                else priceFrom = "0"
             }
         })
 
@@ -247,6 +292,7 @@ abstract class AbstractFiltersActivity : AbstractToolbarActivity(), AdapterView.
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (!s?.toString().isNullOrBlank()) priceTo = s.toString()
+                else priceTo = null
             }
         })
         filterHolder.formSearch.addTextChangedListener(object : TextWatcher {

@@ -50,7 +50,7 @@ public class DataBindingUtil {
     public static void timeLeft(final TextView view, final Product product) {
         CountDownTimer timeLeftTimer;
         Object timerTag = view.getTag();
-
+        if(timerTag instanceof String && timerTag.equals("Expired")) return;
         if (product.getEndDate() != null && product.getCurrentDate() != null && timerTag == null) {
             timeLeftTimer = new CountDownTimer(product.getEndDate().getTime() - product.getCurrentDate().getTime(), 1000) {
                 public void onTick(long millisUntilFinished) {
@@ -62,6 +62,7 @@ public class DataBindingUtil {
 
                 public void onFinish() {
                     view.setText(view.getResources().getString(R.string.item_time_left_expired));
+                    view.setTag("Expired");
                     product.setState("Expired");
                 }
             };

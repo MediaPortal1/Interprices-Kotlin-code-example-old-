@@ -11,9 +11,9 @@
         android:ellipsize="marquee"
         android:focusable="false"
         android:gravity="left"
-        android:paddingBottom="@dimen/medium_padding"
-        android:paddingLeft="@dimen/small_padding"
-        android:paddingTop="@dimen/medium_padding"
+        android:paddingBottom="13dp"
+        android:paddingLeft="8dp"
+        android:paddingTop="13dp"
         android:textColor="@color/gray"
         android:textSize="@dimen/text_medium" />
 
@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:focusable="false"
         android:clickable="false"
+        android:focusable="false"
         android:paddingRight="@dimen/small_padding" />
 </RelativeLayout>

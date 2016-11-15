@@ -5,11 +5,11 @@
     android:layout_height="match_parent"
     tools:context=".AbstractToolbarActivity">
 
-    <include layout="@layout/app_bar_layout"/>
+    <include layout="@layout/app_bar_layout" />
+
     <ViewStub
         android:id="@+id/toolbar_viewstub"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?android:attr/actionBarSize"
-        />
+        android:layout_marginTop="?android:attr/actionBarSize" />
 </RelativeLayout>

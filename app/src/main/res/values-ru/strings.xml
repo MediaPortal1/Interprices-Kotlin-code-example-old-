@@ -60,7 +60,7 @@
     <string name="no_internet">Нету соединения</string>
     <string name="repeat">Повторить</string>
     <string name="search_filter">Фильтр</string>
-    <string name="shipping_cost">Стопиость доставки</string>
+    <string name="shipping_cost">Стоимость доставки</string>
     <string name="shipping_to">Доскавка в</string>
     <string name="shipping_type">Тип доставки</string>
     <string name="total_new"></string>
