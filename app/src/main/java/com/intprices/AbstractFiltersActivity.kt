@@ -85,7 +85,8 @@ abstract class AbstractFiltersActivity : AbstractToolbarActivity(), AdapterView.
 
     abstract protected fun onSearchClick()
 
-    override fun onNothingSelected(parent: AdapterView<*>?) {}
+    override fun onNothingSelected(parent: AdapterView<*>?) {
+    }
 
     protected fun loadFilter() {
         if (isConnected()) {
@@ -126,7 +127,7 @@ abstract class AbstractFiltersActivity : AbstractToolbarActivity(), AdapterView.
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 priceFrom
                 hideKeyboard()
-                 onSearchClick()
+                onSearchClick()
                 return@OnEditorActionListener true
             }
             false
@@ -223,7 +224,8 @@ abstract class AbstractFiltersActivity : AbstractToolbarActivity(), AdapterView.
 
     protected fun setSpinnersToFilter(bundle: Bundle) {
         if (bundle.hasExtra("query")) filterHolder.formSearch.setText(bundle.getString("query"))
-        if (bundle.hasExtra("priceFrom")) filterHolder.priceFrom.setText(bundle.getString("priceFrom"))
+        if (bundle.hasExtra("priceFrom") && bundle.getString("priceFrom") != "0")
+            filterHolder.priceFrom.setText(bundle.getString("priceFrom"))
         if (bundle.hasExtra("priceTo")) filterHolder.priceTo.setText(bundle.getString("priceTo"))
         var adapter: SettingsSpinnerAdapter?
         var position: Int
@@ -297,6 +299,7 @@ abstract class AbstractFiltersActivity : AbstractToolbarActivity(), AdapterView.
         })
         filterHolder.formSearch.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
+                if(s.isNullOrBlank())filterFormQuery = null
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -304,6 +307,7 @@ abstract class AbstractFiltersActivity : AbstractToolbarActivity(), AdapterView.
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (!s?.toString().isNullOrBlank()) filterFormQuery = s.toString()
+                else filterFormQuery = null
             }
         })
         filterHolder.freeShipping.setOnCheckedChangeListener { compoundButton, b -> isFreeShipping = b }

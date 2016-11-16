@@ -9,9 +9,12 @@
         <item name="android:textColorPrimary">@color/gray</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowActionBar">false</item>
+        <item name="actionBarTheme">@style/AppTheme.AppBarOverlay</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" >
+        <item name="colorControlActivated">@color/primaryColorDark</item>
+    </style>
 
     <style name="InfoBlockTextView">
         <item name="android:textSize">@dimen/text_small</item>

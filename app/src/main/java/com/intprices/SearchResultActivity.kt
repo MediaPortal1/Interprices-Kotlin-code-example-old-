@@ -153,6 +153,7 @@ class SearchResultActivity : AbstractFiltersActivity(), OnLoadProducts, OnPageCh
                 textview_noitems.setText(R.string.no_internet)
             }
         }
+        root_result.isRefreshing = false
     }
 
     private fun initProductList() {
@@ -172,12 +173,19 @@ class SearchResultActivity : AbstractFiltersActivity(), OnLoadProducts, OnPageCh
         setLoading(NO_INTERNET)
     }
 
+    private fun noInternetOnListLoading() {
+        initSnackBar()
+        noInternetSnackBar.show()
+    }
+
 
     override fun loadProducts() {
         if (isLoaded) makeSearchMap(request, page)
-        LoadResults().execute()
-        if (noInternetSnackBar.isShown)
-            noInternetSnackBar.dismiss()
+        if(isConnected()) {
+            LoadResults().execute()
+            if (noInternetSnackBar.isShown)
+                noInternetSnackBar.dismiss()
+        } else noInternetOnListLoading()
 
     }
 

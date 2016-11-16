@@ -6,6 +6,7 @@
         android:icon="@drawable/ic_magnify"
         android:title="@string/search_hint"
         app:actionViewClass="android.support.v7.widget.SearchView"
+        android:textCursorDrawable="@drawable/cursor_drawable_action_bar"
         app:showAsAction="always|collapseActionView" />
     <item
         android:id="@+id/menu_filter"

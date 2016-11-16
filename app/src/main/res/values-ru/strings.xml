@@ -57,7 +57,7 @@
     <string name="listing_type">Тип обьявления</string>
     <string name="max_price">Макс</string>
     <string name="min_price">Мин</string>
-    <string name="no_internet">Нету соединения</string>
+    <string name="no_internet">Нет соединения</string>
     <string name="repeat">Повторить</string>
     <string name="search_filter">Фильтр</string>
     <string name="shipping_cost">Стоимость доставки</string>

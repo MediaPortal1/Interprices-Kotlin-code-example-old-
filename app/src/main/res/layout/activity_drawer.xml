@@ -53,6 +53,8 @@
                             android:id="@+id/drawer_filter_form_query"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:maxLines="1"
+                            android:maxEms="30"
                             android:layout_marginTop="@dimen/medium_padding"
                             android:hint="@string/search_hint"
                             android:textColorHint="@color/lightgray" />

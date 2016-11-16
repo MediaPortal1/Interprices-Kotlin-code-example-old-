@@ -54,6 +54,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/medium_padding"
                 android:layout_marginTop="@dimen/medium_padding"
+                android:maxLines="1"
                 android:ems="20"
                 android:hint="@string/search_hint"
                 android:imeActionLabel="Search"
